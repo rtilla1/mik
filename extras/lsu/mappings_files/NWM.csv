@@ -25,7 +25,7 @@ Object File Name,"<identifier type='local' displayLabel='Object File Name'>%valu
 Cataloger,"<extension><cataloger>%value%</cataloger></extension>"
 Image Resolution (Archival),"<extension><imageResolution>%value%</imageResolution></extension>"
 Image Bit-Depth (Archival),"<extension><imageBitDepth>%value%</imageBitDepth></extension>"
-Color Mode (Archival),"<extension><imageBitDepth>%value%</imageBitDepth></extension>"
+Color Mode (Archival),"<extension><colorMode>%value%</colorMode></extension>"
 File Size (Archival),"<extension><fileSize>%value%</fileSize></extension>"
 Hardware/Software (Archival),"<extension><hardwareSoftware>%value%</hardwareSoftware></extension>"
 Digitized By,"<extension><digitizedBy>%value%</digitizedBy></extension>"

@@ -22,7 +22,7 @@ Date modified,"<recordInfo><recordChangeDate>%value%</recordChangeDate></recordI
 Cataloger,"<extension><cataloger>%value%</cataloger></extension>"
 Image Resolution (Archival),"<extension><imageResolution>%value%</imageResolution></extension>"
 Image Bit-Depth (Archival),"<extension><imageBitDepth>%value%</imageBitDepth></extension>"
-Color Mode (Archival),"<extension><imageBitDepth>%value%</imageBitDepth></extension>"
+Color Mode (Archival),"<extension><colorMode>%value%</colorMode></extension>"
 Extent (Archival),"<extension><extentArchival>%value%</extentArchival></extension>"
 File Size (Archival),"<extension><fileSize>%value%</fileSize></extension>"
 Hardware/Software (Archival),"<extension><hardwareSoftware>%value%</hardwareSoftware></extension>"
