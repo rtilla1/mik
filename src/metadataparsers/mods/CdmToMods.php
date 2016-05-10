@@ -610,7 +610,11 @@ class CdmToMods extends Mods
     {
         $wsUrl = $this->wsUrl;
         $alias = $this->alias;
-        $query = $wsUrl . 'dmGetCollectionFieldInfo/' . $alias . '/json';
+        if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
+            $query = 'Cached_Cdm_files/' . $alias . '/Collection_Fields.json';
+        } else { 
+            $query = $wsUrl . 'dmGetCollectionFieldInfo/' . $alias . '/json';
+        }
         $json = file_get_contents($query, false, null);
         return json_decode($json, true);
     }
