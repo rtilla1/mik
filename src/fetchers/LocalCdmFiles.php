@@ -187,7 +187,7 @@ class LocalCdmFiles extends Fetcher
      */
     public function getItemInfo($pointer)
     {
-        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.xml';
+        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.json';
         $doc = file_get_contents($filepath);
         $itemInfo = json_decode($doc, true);
         if (is_array($itemInfo)) {
