@@ -18,9 +18,12 @@
     
    
     <xsl:template match="subject[topic]">
+        <xsl:variable name="authAttr" select="@authority"/>
         <xsl:for-each select="topic">
             <xsl:element name="subject">
-                <xsl:attribute name="authority">lcsh</xsl:attribute>
+                <xsl:attribute name="authority">
+                    <xsl:value-of select="$authAttr" />
+                </xsl:attribute>
                     <xsl:for-each select="tokenize(.,'--')">
                         <xsl:element name="topic">
                             <xsl:value-of select="replace(replace(concat(upper-case(substring(.,1,1)),substring(.,2)), '^\s+|\s+$', ''),'\.$','')"/>
@@ -31,14 +34,15 @@
     </xsl:template>
     
     <xsl:template match="subject[geographic]">
+        <xsl:variable name="authAttr" select="@authority"/>
         <xsl:for-each select="tokenize(geographic,';')">
             <xsl:element name="subject">
-                <xsl:attribute name="authority">local</xsl:attribute>
-                
+                <xsl:attribute name="authority">
+                    <xsl:value-of select="$authAttr" />
+                </xsl:attribute>
                     <xsl:element name="geographic">
                         <xsl:value-of select="replace(replace(concat(upper-case(substring(.,1,1)),substring(.,2)), '^\s+|\s+$', ''),'\.$','')"/>
-                    </xsl:element>
-                
+                    </xsl:element>             
             </xsl:element>
         </xsl:for-each>
     </xsl:template>
