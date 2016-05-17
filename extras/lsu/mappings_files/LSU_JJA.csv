@@ -26,7 +26,7 @@ Repository,"<note type='ownership' displayLabel='Repository'>E.A. McIlhenny Natu
 Repository Collection,"<relatedItem type='host'><titleInfo type='alternative' displayLabel='Repository Collection'><title>%value%</title></titleInfo></relatedItem>"
 null6,"<relatedItem type='host'><location><url displayLabel='Relation'>http://ldl.lib.lsu.edu/content/john-james-audubon-louisiana</url></location></relatedItem>"
 null1,"<location><physicalLocation authority='oclcorg' displayLabel='OCLC Member Symbol'>LUU</physicalLocation></location>"
-null2,"<location><physicalLocation usage='primary' displayLabel='Physical Location'>Louisiana State University: LSU Libraries</physicalLocation></location>"
+null2,"<location><physicalLocation displayLabel='Physical Location'>Louisiana State University: LSU Libraries</physicalLocation></location>"
 null3,"<location><url displayLabel='Institution Web Site'>http://lib.lsu.edu</url></location>"
 null4,"<location><holdingSimple><copyInformation><subLocation>Hill Memorial Library: Special Collections</subLocation></copyInformation></holdingSimple></location>"
 Restrictions,"<accessCondition type='restriction on access' displayLabel='Rights'>%value%</accessCondition>"
