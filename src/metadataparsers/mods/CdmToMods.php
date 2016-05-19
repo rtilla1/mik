@@ -625,7 +625,7 @@ class CdmToMods extends Mods
         $wsUrl = $this->wsUrl;
         $alias = $this->alias;
         if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
-            $query = 'Cached_Cdm_files/' . $alias . '/Collection_Fields.json';
+            $query = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $alias . '/Collection_Fields.json';
         } else { 
             $query = $wsUrl . 'dmGetCollectionFieldInfo/' . $alias . '/json';
         }

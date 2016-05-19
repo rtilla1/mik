@@ -95,7 +95,7 @@ class AddContentdmData extends MetadataManipulator
           $dmGetItemInfo->appendChild($source);
           $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');
           if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
-              $source = 'Cached_Cdm_files/' . $this->alias .DIRECTORY_SEPARATOR. $this->record_key . '.json';
+              $source = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->alias .DIRECTORY_SEPARATOR. $this->record_key . '.json';
               $item_info = file_get_contents($source);
           } 
           elseif ($this->settings['FETCHER']['class'] == 'Cdm') {

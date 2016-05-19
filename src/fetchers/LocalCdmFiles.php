@@ -69,6 +69,7 @@ class LocalCdmFiles extends Fetcher
     public function __construct($settings)
     {
         parent::__construct($settings);
+        $this->settings['FILE_GETTER'] = $settings['FILE_GETTER'];
         $this->key = $this->settings['record_key'];
         $this->thumbnail = new \mik\filemanipulators\ThumbnailFromCdm($settings);
 
@@ -124,7 +125,7 @@ class LocalCdmFiles extends Fetcher
         $output->records = array();
         for ($processed_chunks = 1; $processed_chunks <= $num_chunks; $processed_chunks++) {
             $start_at_as_str = strval($this->start_at);
-            $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/Elems_in_Collection_' . $start_at_as_str .'.json';
+            $filepath = $this->settings['FILE_GETTER']['local_dir']. DIRECTORY_SEPARATOR . $this->settings['alias'] . '/Elems_in_Collection_' . $start_at_as_str .'.json';
 
             if ($json = file_get_contents($filepath, false, null)) {
                 $chunk_output = json_decode($json);
@@ -165,7 +166,7 @@ class LocalCdmFiles extends Fetcher
      */
     public function getNumRecs()
     {
-        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/Collection_TotalRecs.xml';
+        $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/Collection_TotalRecs.xml';
         if($xml = file_get_contents($filepath, false, null)) {
             $doc = new \DomDocument('1.0');
             $doc->loadXML($xml);
@@ -189,7 +190,7 @@ class LocalCdmFiles extends Fetcher
     {
         
         $raw_metadata_cache = $this->settings['temp_directory'] . DIRECTORY_SEPARATOR . $pointer . '.metadata';
-        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.json';
+        $filepath = $this->settings['FILE_GETTER']['local_dir'] . $this->settings['alias'] . '/' . $pointer . '.json';
 
         if (!file_exists($raw_metadata_cache)) {
             $doc = file_get_contents($filepath);
@@ -197,7 +198,7 @@ class LocalCdmFiles extends Fetcher
             file_put_contents($raw_metadata_cache, serialize($itemInfo));
         }
         
-        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.json';
+        $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/' . $pointer . '.json';
         $doc = file_get_contents($filepath);
         $itemInfo = json_decode($doc, true);
         if (is_array($itemInfo)) {
