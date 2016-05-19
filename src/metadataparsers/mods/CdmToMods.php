@@ -60,8 +60,13 @@ class CdmToMods extends Mods
     {
 
         parent::__construct($settings);
-
-        $this->fetcher = new \mik\fetchers\Cdm($settings);
+        
+        if ($this->settings['FETCHER']['class'] == 'Cdm') {
+            $this->fetcher = new \mik\fetchers\Cdm($settings);
+        }
+        elseif ($this-> settings['FETCHER']['class'] == 'LocalCdmFiles') {
+            $this->fetcher = new \mik\fetchers\LocalCdmFiles($settings);
+        }
         $this->includeMigratedFromUri = $this->settings['METADATA_PARSER']['include_migrated_from_uri'];
         $this->mappingCSVpath = $this->settings['METADATA_PARSER']['mapping_csv_path'];
         $this->wsUrl = $this->settings['METADATA_PARSER']['ws_url'];
@@ -134,11 +139,20 @@ class CdmToMods extends Mods
               continue;
             }
             $CONTENTdmField = $valueArray[0];
-            // because an easy error is typos in mappings_files -- this will indicate which line has typo.
-            var_dump($CONTENTdmField);
-            if (isset($CONTENTdmFieldValuesArray[$CONTENTdmField])) {
-                $fieldValue = $CONTENTdmFieldValuesArray[$CONTENTdmField];
-            } elseif (preg_match("/(null)\d+/i", $key)) {
+            
+            $insensitiveMatch = function() use ($CONTENTdmFieldValuesArray, $key) {
+                $fieldValue = false;
+                foreach ($CONTENTdmFieldValuesArray as $cdmkey=>$cdmvalue) {
+                    if (strtolower($cdmkey) == strtolower($key)) {
+                        $fieldValue = $cdmvalue;
+                    }
+                } 
+                return $fieldValue;
+            };
+            $fieldValue = $insensitiveMatch();
+            if ($fieldValue) { // workaround for passing when $fieldValue assigned by insensitiveMatch
+            }
+            elseif (preg_match("/(null)\d+/i", $key)) {
                 // Special source field name for mappings to static snippets.
                 $fieldValue = '';
             } else {
@@ -610,7 +624,11 @@ class CdmToMods extends Mods
     {
         $wsUrl = $this->wsUrl;
         $alias = $this->alias;
-        $query = $wsUrl . 'dmGetCollectionFieldInfo/' . $alias . '/json';
+        if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
+            $query = 'Cached_Cdm_files/' . $alias . '/Collection_Fields.json';
+        } else { 
+            $query = $wsUrl . 'dmGetCollectionFieldInfo/' . $alias . '/json';
+        }
         $json = file_get_contents($query, false, null);
         return json_decode($json, true);
     }

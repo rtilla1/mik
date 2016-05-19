@@ -233,6 +233,14 @@ class NormalizeDate extends MetadataManipulator
                 return trim($metadata[$this->sourceDateField]);
             }
         }
+        // Cached metadata for Local toolchains is a serialized associative array.
+        // If the field is empty, its value is an empty array.
+        if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
+            $metadata = unserialize($raw_metadata_cache);
+            if (isset($metadata[$this->sourceDateField]) && is_string($metadata[$this->sourceDateField])) {
+                return trim($metadata[$this->sourceDateField]);
+            }
+        }
         // If we haven't returned at this point, log failure.
         $this->log->addWarning("NormalizeDate",array(
             'Record key' => $this->record_key,
