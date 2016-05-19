@@ -139,8 +139,6 @@ class CdmToMods extends Mods
               continue;
             }
             $CONTENTdmField = $valueArray[0];
-            // because an easy error is typos in mappings_files -- this will indicate which line has typo.
-            var_dump($CONTENTdmField);
             
             $insensitiveMatch = function() use ($CONTENTdmFieldValuesArray, $key) {
                 $fieldValue = false;
