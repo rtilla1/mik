@@ -187,6 +187,16 @@ class LocalCdmFiles extends Fetcher
      */
     public function getItemInfo($pointer)
     {
+        
+        $raw_metadata_cache = $this->settings['temp_directory'] . DIRECTORY_SEPARATOR . $pointer . '.metadata';
+        $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.json';
+
+        if (!file_exists($raw_metadata_cache)) {
+            $doc = file_get_contents($filepath);
+            $itemInfo = json_decode($doc, true);
+            file_put_contents($raw_metadata_cache, serialize($itemInfo));
+        }
+        
         $filepath = 'Cached_Cdm_files/' . $this->settings['alias'] . '/' . $pointer . '.json';
         $doc = file_get_contents($filepath);
         $itemInfo = json_decode($doc, true);
