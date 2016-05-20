@@ -23,7 +23,7 @@
     
     <xsl:variable name="dates" select="node()/originInfo/dateIssued/text()"/>
     <xsl:variable name="yearRangeRegEx" select="'([0-9]{4})-([0-9]{4})'"/> <!-- YYYY-YYYY -->
-    <xsl:variable name="caRegEx" select="'[cC]a.\s([0-9]{4})'"/> <!-- Ca. YYYY -->
+    <xsl:variable name="caRegEx" select="'[cC]a.\s?([0-9]{4})'"/> <!-- Ca. YYYY -->
     <xsl:variable name="betweenRegEx" select="'Between\s([0-9]{4})\sand\s([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
