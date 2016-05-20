@@ -14,6 +14,9 @@ MIK is developed by staff at Simon Fraser University Library in support of their
 
 We are continuing to improve our documentation, which is on the [MIK wiki](https://github.com/MarcusBarnes/mik/wiki). Please let us know if you have any questions, suggestions or if you would like to assist.
 
+### LSU-Specific
+see https://github.com/lsulibraries/mik/wiki/Local-FIles
+
 ## Troubleshooting and support
 
 If you have a question, please open a Github issue.

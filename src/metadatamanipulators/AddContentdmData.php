@@ -93,7 +93,15 @@ class AddContentdmData extends MetadataManipulator
           $source = $dom->createAttribute('source');
           $source->value = $source_url;          
           $dmGetItemInfo->appendChild($source);
-          $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');          
+          $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');
+          if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
+              $source = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->alias .DIRECTORY_SEPARATOR. $this->record_key . '.json';
+              $item_info = file_get_contents($source);
+          } 
+          elseif ($this->settings['FETCHER']['class'] == 'Cdm') {
+            $item_info = file_get_contents($source_url, false, null);
+          }
+          
           // CONTENTdm returns a 200 OK with its error messages, so we can't rely
           // on catching all 'errors' with the above try/catch block. Instead, we
           // check to see if the string 'dmcreated' (one of the metadata fields
