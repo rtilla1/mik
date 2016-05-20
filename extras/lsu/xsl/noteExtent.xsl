@@ -9,7 +9,8 @@
     
     <!-- breaks up content note with extent before semicolon.
     uses the first part to create a physicalDescripton/extent
-    keeps the second part as content note -->
+    keeps the second part as content note
+    for BRS -->
     
     <xsl:template match="@* | node()">
         <xsl:copy>
