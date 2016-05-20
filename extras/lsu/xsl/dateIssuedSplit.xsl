@@ -27,6 +27,7 @@
     <xsl:variable name="betweenRegEx" select="'Between\s([0-9]{4})\sand\s([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
+    <xsl:variable name="orRegEx" select="'([0-9]{4})\sor\s([0-9]{4})'"/> <!-- YYYY or YYYY -->
     
     <xsl:template match="originInfo/dateIssued">
         <xsl:choose>
@@ -92,6 +93,18 @@
                     <xsl:matching-substring>
                         <dateIssued keyDate="yes" qualifier="inferred">
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $orRegEx)">
+                <xsl:analyze-string select="$dates" regex="{$orRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued point="start" keyDate="yes" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                        <dateIssued point="end" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
