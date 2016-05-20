@@ -26,6 +26,7 @@
     <xsl:variable name="caRegEx" select="'[cC]a.\s([0-9]{4})'"/> <!-- Ca. YYYY -->
     <xsl:variable name="betweenRegEx" select="'Between\s([0-9]{4})\sand\s([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
+    <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
     
     <xsl:template match="originInfo/dateIssued">
         <xsl:choose>
@@ -82,6 +83,15 @@
                         </dateIssued>
                         <dateIssued point="end">
                             <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $inferredRegEx) and not(matches(., '-'))">
+                <xsl:analyze-string select="$dates" regex="{$inferredRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued keyDate="yes" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
