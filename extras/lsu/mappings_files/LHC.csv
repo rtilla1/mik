@@ -1,6 +1,6 @@
 Title,"<titleInfo><title>%value%</title></titleInfo>"
-Sub-title ,"<titleInfo><subTitle>%value%</subTitle></titleInfo>"
-Verso-title ,"<titleInfo type='alternative' displayLabel='Verso Title'><title>%value%</title></titleInfo>"
+Sub-title,"<titleInfo><subTitle>%value%</subTitle></titleInfo>"
+Verso-title,"<titleInfo type='alternative' displayLabel='Verso Title'><title>%value%</title></titleInfo>"
 Insets,"<note type='content' displayLabel='Insets'>%value%</note>"
 Creator,"<name displayLabel='Creator'><namePart>%value%</namePart><role><roleTerm type='code' authority='marcrelator'>cre</roleTerm><roleTerm type='text' authority='marcrelator'>Creator</roleTerm></role></name>"
 Date,"<originInfo><dateIssued keyDate='yes'>%value%</dateIssued></originInfo>"
