@@ -28,6 +28,7 @@
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
     <xsl:variable name="orRegEx" select="'([0-9]{4})\sor\s([0-9]{4})'"/> <!-- YYYY or YYYY -->
+    <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
     
     <xsl:template match="originInfo/dateIssued">
         <xsl:choose>
@@ -105,6 +106,15 @@
                         </dateIssued>
                         <dateIssued point="end" qualifier="inferred">
                             <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $historicalRegEx)">
+                <xsl:analyze-string select="$dates" regex="{$historicalRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued keyDate="yes!!">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
