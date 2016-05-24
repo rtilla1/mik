@@ -40,21 +40,29 @@ class AddLocalContentdmData extends AddContentdmData
     {
           // Use Guzzle to fetch the output of the call to dmGetItemInfo
           // for the current object.
-          $url = $this->settings['METADATA_PARSER']['ws_url'] .
-              $cdm_api_function . '/' . $this->alias . '/' . $pointer . '/' . $format;
-          $client = new Client();
-          try {
-              $response = $client->get($url);
-          } catch (Exception $e) {
-              $this->log->addInfo("AddContentdmData",
-                  array('HTTP request error' => $e->getMessage()));
-              return '';
-          }
-          $output = $response->getBody();
-          return $output;
+        if($cdm_api_function === 'dmGetItemInfo'){
+            $cdmdataFile = sprintf("%s/%s/%s.json",$this->settings['FILE_GETTER']['local_dir'], $alias, $pointer);
+        }elseif ($cdm_api_function === 'dmGetCompoundObjectInfo') {
+            $cdmdataFile = sprintf("%s/%s/Cpd/%s_cpd.xml",$this->settings['FILE_GETTER']['local_dir'], $alias, $pointer);
+        }else{
+            return parent::getCdmData($alias, $pointer, $cdm_api_function, $format);
+        }
+
+        try {
+            if(file_exists($cdmdataFile)){
+                $cdmData = file_get_contents($cdmdataFile);
+            }else{
+                return false;
+            }
+        } catch (Exception $e) {
+            $this->log->addInfo("AddContentdmData",
+                array('Open file error' => $e->getMessage()));
+            return '';
+        }
+        return $cdmData;
     }
     
     public function manipulate($input) {
-        parent::manipulate($input);
+        return parent::manipulate($input);
     }
 }

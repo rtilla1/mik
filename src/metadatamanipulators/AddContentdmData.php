@@ -171,8 +171,8 @@ class AddContentdmData extends MetadataManipulator
               $GetParent->appendChild($cdata);
               $contentdmdata->appendChild($GetParent);
           }             
-
-          return $dom->saveXML($dom->documentElement);
+          $ret = $dom->saveXML($dom->documentElement);
+          return $ret;
         }
         else {
             // If current fragment is not <extension><CONTENTdmData>, return it
