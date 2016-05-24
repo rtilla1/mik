@@ -20,7 +20,6 @@
         <xsl:variable name="restOfTitle" select="substring-after(normalize-space(.),' ')"/>
         <xsl:choose>
             <xsl:when test="$firstWord='The'">
-                
                 <nonSort>
                     <xsl:value-of select="$firstWord"/>
                 </nonSort>
