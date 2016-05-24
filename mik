@@ -173,6 +173,9 @@ foreach ($records as $record) {
     if (strlen($record_key) == 0) {
         continue;
     }
+    if ($record_num == $limit) {
+        break;
+    }
 
     // Slow down execution if configured to do so.
     if (isset($settings['FETCHER']['sleep'])) {

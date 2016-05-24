@@ -7,7 +7,7 @@
     version="2.0"
     xmlns="http://www.loc.gov/mods/v3" >
     
-    <!-- If the namePart is blank, or is "Unknown" then delete the name node -->
+    <!-- If the namePart is repeated, split them into different contributors -->
     
     <xsl:template match="@* | node()">
         <xsl:copy>
@@ -21,6 +21,20 @@
                 <role>
                     <roleTerm type="text" authority="marcrelator">Contributor</roleTerm>
                     <roleTerm type="code" authority="marcrelator">ctb</roleTerm>
+                </role>
+                <namePart>
+                    <xsl:value-of select="."/>
+                </namePart>
+            </name>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template match="name[@displayLabel='Creator']">
+        <xsl:for-each select="namePart">
+            <name displayLabel="Creator">
+                <role>
+                    <roleTerm type="text" authority="marcrelator">Creator</roleTerm>
+                    <roleTerm type="code" authority="marcrelator">cre</roleTerm>
                 </role>
                 <namePart>
                     <xsl:value-of select="."/>
