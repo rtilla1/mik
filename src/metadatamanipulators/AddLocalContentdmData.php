@@ -45,7 +45,7 @@ class AddLocalContentdmData extends AddContentdmData
         }elseif ($cdm_api_function === 'dmGetCompoundObjectInfo') {
             $cdmdataFile = sprintf("%s/%s/Cpd/%s_cpd.xml",$this->settings['FILE_GETTER']['local_dir'], $alias, $pointer);
         }else{
-            return parent::getCdmData($alias, $pointer, $cdm_api_function, $format);
+            $cdmdataFile = sprintf("%s/%s/%s_parent.xml",$this->settings['FILE_GETTER']['local_dir'], $alias, $pointer);
         }
 
         try {
