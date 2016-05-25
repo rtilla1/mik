@@ -20,6 +20,7 @@
             <xsl:apply-templates select="titleInfo" />
             <xsl:apply-templates select="part" />
             <xsl:apply-templates select="name" />
+            <xsl:apply-templates select="note[@type='statement of responsibility']"/>
             <xsl:apply-templates select="originInfo" />
             <xsl:apply-templates select="subject" />
             <xsl:apply-templates select="abstract" />

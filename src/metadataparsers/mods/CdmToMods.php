@@ -139,6 +139,9 @@ class CdmToMods extends Mods
               continue;
             }
             $CONTENTdmField = $valueArray[0];
+
+            // indicates last mappings line to run (E.g., which caused mik to crash)
+            var_dump($CONTENTdmField);
             
             $insensitiveMatch = function() use ($CONTENTdmFieldValuesArray, $key) {
                 $fieldValue = false;
