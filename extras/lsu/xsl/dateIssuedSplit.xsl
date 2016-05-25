@@ -32,7 +32,7 @@
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
     <xsl:variable name="orRegEx" select="'([0-9]{4})\sor\s([0-9]{4})'"/> <!-- YYYY or YYYY -->
     <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
-    <xsl:variable name="decadeRegEx" select="'([0-9]{3})-'"/> <!-- YYY- -->
+    <xsl:variable name="decadeRegEx" select="'([0-9]{3})-$'"/> <!-- YYY- -->
     <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})\?'"/> <!-- YYY? -->
     
     <xsl:template match="originInfo/dateIssued">
