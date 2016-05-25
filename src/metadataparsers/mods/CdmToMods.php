@@ -142,15 +142,14 @@ class CdmToMods extends Mods
 
             // indicates last mappings line to run (E.g., which caused mik to crash)
             var_dump($CONTENTdmField);
-            
+
             $insensitiveMatch = function() use ($CONTENTdmFieldValuesArray, $key) {
-                $fieldValue = false;
                 foreach ($CONTENTdmFieldValuesArray as $cdmkey=>$cdmvalue) {
                     if (strtolower($cdmkey) == strtolower($key)) {
-                        $fieldValue = $cdmvalue;
+                        return $cdmvalue;
                     }
                 } 
-                return $fieldValue;
+                return false;
             };
             $fieldValue = $insensitiveMatch();
             if ($fieldValue) { // workaround for passing when $fieldValue assigned by insensitiveMatch
