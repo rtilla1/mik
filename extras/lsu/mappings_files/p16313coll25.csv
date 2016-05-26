@@ -10,7 +10,7 @@ Format,"<physicalDescription><internetMediaType>pdf</internetMediaType></physica
 Language,"<language><languageTerm type='code'>en</languageTerm></language>"
 Source,"<note type='ownership' displayLabel='Repository'>University of Louisiana at Lafayette (http://library.louisiana.edu/)</note>"
 null6,"<relatedItem type='host'><titleInfo displayLabel='Digital Collection'><title>L'Acadien Yearbooks</title></titleInfo></relatedItem>"
-Relation,"<relatedItem type='host'><location><url displayLabel='Relation'>http://ldl.lib.lsu.edu/content/lacadien-yearbooks</url></location></relatedItem>'Title,'<titleInfo><title>%value%</title></titleInfo>"
+Relation,"<relatedItem type='host'><location><url displayLabel='Relation'>http://ldl.lib.lsu.edu/content/lacadien-yearbooks</url></location></relatedItem>"
 null1,"<location><physicalLocation authority='oclcorg' displayLabel='OCLC Member Symbol'>LWA</physicalLocation></location>"
 null2,"<location><physicalLocation displayLabel='Physical Location'>University of Louisiana at Lafayette: University Libraries</physicalLocation></location>"
 null3,"<location><url displayLabel='Institution Web Site'>http://library.louisiana.edu/</url></location>"
