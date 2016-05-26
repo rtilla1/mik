@@ -152,7 +152,7 @@ class CdmToMods extends Mods
                 return false;
             };
             $fieldValue = $insensitiveMatch();
-            if (!$fieldValue) { // workaround for passing when $fieldValue assigned by insensitiveMatch
+            if ($fieldValue) { // workaround for passing when $fieldValue assigned by insensitiveMatch
                 if (isset($CONTENTdmFieldValuesArray[$CONTENTdmField])) {
                     $fieldValue = $CONTENTdmFieldValuesArray[$CONTENTdmField];
                 }
