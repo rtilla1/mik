@@ -19,7 +19,7 @@
         <xsl:variable name="firstWord" select="substring-before(concat(normalize-space(.), ' '),' ')"/>
         <xsl:variable name="restOfTitle" select="substring-after(normalize-space(.),' ')"/>
         <xsl:choose>
-            <xsl:when test="$firstWord='The'">
+            <xsl:when test="$firstWord='The' or $firstWord='[The'">
                 <nonSort>
                     <xsl:value-of select="$firstWord"/>
                 </nonSort>
@@ -27,7 +27,7 @@
                     <xsl:value-of select="$restOfTitle"/>
                 </title>    
             </xsl:when>
-            <xsl:when test="$firstWord='An'">
+            <xsl:when test="$firstWord='An' or $firstWord='[An'">
                 <nonSort>
                     <xsl:value-of select="$firstWord"/>
                 </nonSort>
@@ -35,7 +35,7 @@
                     <xsl:value-of select="$restOfTitle"/>
                 </title>   
             </xsl:when>
-            <xsl:when test="$firstWord='A'">
+            <xsl:when test="$firstWord='A' or $firstWord='[A'">
                 <nonSort>
                     <xsl:value-of select="$firstWord"/>
                 </nonSort>
@@ -45,7 +45,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <title>
-                <xsl:value-of select="." />
+                   <xsl:value-of select="." />
                 </title>    
             </xsl:otherwise>
         </xsl:choose>
