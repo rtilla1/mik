@@ -4,3 +4,4 @@ composer.*
 /nbproject/*
 output/*
 Cached_Cdm_files/*
+log/*
