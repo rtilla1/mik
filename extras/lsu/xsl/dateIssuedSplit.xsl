@@ -24,9 +24,10 @@
     <xsl:variable name="dates" select="node()/originInfo/dateIssued/text()"/>
     <xsl:variable name="yearRangeRegEx" select="'^([0-9]{4})\s?-\s?([0-9]{4})'"/> <!-- YYYY-YYYY -->
     <xsl:variable name="inferredYearRangeRegEx" select="'\[([0-9]{4})-([0-9]{4})\]'"/> <!-- [YYYY-YYYY] -->
-    <xsl:variable name="caRegEx" select="'\[?[cC]a.\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] -->
+    <xsl:variable name="caRegEx" select="'\[?[cC]a\.\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] -->
     <xsl:variable name="caDecadeRegEx" select="'[cC]a.\s?([0-9]{3})(0s|-)'"/> <!-- [Ca. YYYYs] or Ca. YYYYs or Ca. YYY- -->
-    <xsl:variable name="betweenRegEx" select="'^[bB]etween\s([0-9]{4})\sand\s([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
+    <xsl:variable name="caEndRegEx" select="'([0-9]{4})\s[cC]a\.'"/> <!-- YYYY ca. --> 
+    <xsl:variable name="betweenRegEx" select="'^[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
     <xsl:variable name="approxBetweenRegEx" select="'\[[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})\]'"/> <!-- [Between YYYY and YYYY] or [Between YYYY-YYYY] -->
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
@@ -72,6 +73,15 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </xsl:when>
+            <xsl:when test="matches(., $caEndRegEx) and not(matches(., '-'))">
+                <xsl:analyze-string select="$dates" regex="{$caEndRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued keyDate="yes" qualifier="approximate">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
             <xsl:when test="matches(., '-') and matches(., 'Ca.')">
                 <xsl:analyze-string select="$dates" regex="{$yearRangeRegEx}">
                     <xsl:matching-substring>
@@ -105,7 +115,7 @@
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
                         </dateIssued>
                         <dateIssued point="end">
-                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(3), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
