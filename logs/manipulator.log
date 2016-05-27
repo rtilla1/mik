@@ -1,5 +1,0 @@
-[2016-05-26 13:19:49] config.WARNING: NormalizeDate {"Record key":327,"Source date value does not match any pattern":"193-"} []
-[2016-05-26 13:21:26] config.WARNING: NormalizeDate {"Record key":327,"Source date value does not match any pattern":"193-"} []
-[2016-05-26 13:27:09] config.INFO: NormalizeDate {"Record key":26,"Source date value":"1963-01-10","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1963-01-10</dateIssued></originInfo>"} []
-[2016-05-26 13:27:23] config.INFO: NormalizeDate {"Record key":755,"Source date value":"1968-02-17","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1968-02-17</dateIssued></originInfo>"} []
-[2016-05-26 14:05:22] config.WARNING: NormalizeDate {"Record key":327,"Source date value does not match any pattern":"193-"} []
