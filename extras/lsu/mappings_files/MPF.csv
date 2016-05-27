@@ -31,4 +31,4 @@ Extent (Archival),"<extension><extentArchival>%value%</extentArchival></extensio
 Image Manipulation (Archival),"<extension><imageManipulation>%value%</imageManipulation></extension>"
 Hardware/Software (Archival),"<extension><hardwareSoftware>%value%</hardwareSoftware></extension>"
 Digitized By,"<extension><digitizedBy>%value%</digitizedBy></extension>"
-null ,"<extension><CONTENTdmData></CONTENTdmData></extension>"
+null10,"<extension><CONTENTdmData></CONTENTdmData></extension>"
