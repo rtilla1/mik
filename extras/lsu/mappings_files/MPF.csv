@@ -1,7 +1,6 @@
 Title,"<titleInfo><title>%value%</title></titleInfo>"
 Creator,"<name type='personal' usage='primary' displayLabel='Author'><namePart>%value%</namePart><role><roleTerm type='code' authority='marcrelator'>aut</roleTerm><roleTerm type='text' authority='marcrelator'>Author</roleTerm></role></name>"
-null1,"<originInfo><dateIssued keyDate='yes'>1858-01-06</dateIssued></originInfo>"
-null2,"<originInfo><dateIssued qualifier='inferred'>1859</dateIssued></originInfo>"
+null1,"<originInfo><dateIssued keyDate='yes'>1858-01-06</dateIssued><dateIssued qualifier='inferred'>1859</dateIssued></originInfo>"
 Digitized Date,"<originInfo><dateCaptured>2004-09</dateCaptured></originInfo>"
 Subject,"<subject authority='lcsh'><topic>%value%</topic></subject>"
 Coverage-Spatial,"<subject authority='lcsh' displayLabel='Geographic Subject'><geographic>%value%</geographic></subject>"
