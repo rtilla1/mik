@@ -173,7 +173,7 @@ foreach ($records as $record) {
     if (strlen($record_key) == 0) {
         continue;
     }
-    if ($record_num == $limit) {
+    if (isset($options['limit']) && ($record_num == $limit)) {
         break;
     }
 
