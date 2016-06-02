@@ -27,3 +27,8 @@
 [2016-06-01 13:14:30] config.INFO: NormalizeDate {"Record key":243,"Source date value":"1953-11-03","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1953-11-03</dateIssued></originInfo>"} []
 [2016-06-01 13:14:46] config.INFO: NormalizeDate {"Record key":295,"Source date value":"1958-10-14","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1958-10-14</dateIssued></originInfo>"} []
 [2016-06-02 09:37:26] config.INFO: NormalizeDate {"Record key":17,"Source date value":"2005-03-17","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">2005-03-17</dateIssued></originInfo>"} []
+[2016-06-02 09:43:11] config.INFO: NormalizeDate {"Record key":17,"Source date value":"2005-03-17","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">2005-03-17</dateIssued></originInfo>"} []
+[2016-06-02 09:44:39] config.WARNING: NormalizeDate {"Record key":327,"Source date value does not match any pattern":"ca. 1935"} []
+[2016-06-02 09:51:02] config.INFO: NormalizeDate {"Record key":17,"Source date value":"10/25/1977","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1977-25-10</dateIssued></originInfo>"} []
+[2016-06-02 09:51:02] config.WARNING: NormalizeDate {"Record key":17,"Normalized date value is not a valid date":"1977-25-10"} []
+[2016-06-02 09:53:43] config.INFO: NormalizeDate {"Record key":17,"Source date value":"1900-10-09","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1900-10-09</dateIssued></originInfo>"} []
