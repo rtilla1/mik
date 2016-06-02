@@ -26,3 +26,4 @@
 [2016-06-01 13:14:12] config.INFO: NormalizeDate {"Record key":213,"Source date value":"1950-03-17","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1950-03-17</dateIssued></originInfo>"} []
 [2016-06-01 13:14:30] config.INFO: NormalizeDate {"Record key":243,"Source date value":"1953-11-03","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1953-11-03</dateIssued></originInfo>"} []
 [2016-06-01 13:14:46] config.INFO: NormalizeDate {"Record key":295,"Source date value":"1958-10-14","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">1958-10-14</dateIssued></originInfo>"} []
+[2016-06-02 09:37:26] config.INFO: NormalizeDate {"Record key":17,"Source date value":"2005-03-17","Normalized MODS XML element":"<originInfo><dateIssued keyDate=\"yes\">2005-03-17</dateIssued></originInfo>"} []
