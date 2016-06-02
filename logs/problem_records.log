@@ -21,3 +21,5 @@
 [2016-06-02 09:50:34] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"ACC","last_updated_on":"2016-04-04","last_update_by":"us"}} []
 [2016-06-02 09:53:24] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"RTP","last_updated_on":"2016-04-04","last_update_by":"us"}} []
 [2016-06-02 09:53:43] ProblemRecords.ERROR: 17 [] []
+[2016-06-02 09:55:15] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"RTP","last_updated_on":"2016-04-04","last_update_by":"us"}} []
+[2016-06-02 09:57:54] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"OSC","last_updated_on":"2016-04-04","last_update_by":"us"}} []
