@@ -7,7 +7,7 @@
     version="2.0"
     xmlns="http://www.loc.gov/mods/v3" >
     
-    <!-- If the first word of the title node is "A", "An" or "The" then it wraps it in <nonSort> -->
+    <!-- If the first word of the title node is "A", "An" or "The" or some special character "'[(... then it wraps it in <nonSort> -->
     
     <xsl:template match="@* | node()">
         <xsl:copy>
@@ -15,35 +15,51 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="title">
-        <xsl:variable name="firstWord" select="substring-before(concat(normalize-space(.), ' '),' ')"/>
-        <xsl:variable name="restOfTitle" select="substring-after(normalize-space(.),' ')"/>
+    <xsl:variable name="titleText" select="node()/titleInfo/title/text()"/>
+    <xsl:variable name="nonSortArticleRegEx" select="'^([&quot;''\[\(\.{3}]*)(An|A|The)?\s(.+)'"/>
+    <xsl:variable name="nonSortPuncRegEx" select="'^([&quot;''\[\(\.{3}]+)(.+)'"/>
+    <xsl:variable name="nonSortAQuotRegEx" select="'^(A\s[&quot;])(.+)'"/>  <!-- A " -->
+    
+    <xsl:template match="titleInfo/title">
         <xsl:choose>
-            <xsl:when test="$firstWord='The' or $firstWord='[The'">
-                <nonSort>
-                    <xsl:value-of select="$firstWord"/>
-                </nonSort>
-                <title>
-                    <xsl:value-of select="$restOfTitle"/>
-                </title>    
+            <xsl:when test="matches(., $nonSortAQuotRegEx)">
+                <xsl:analyze-string select="$titleText" regex="{$nonSortAQuotRegEx}">
+                    <xsl:matching-substring>
+                        <nonSort>
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </nonSort>
+                        <title>
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </title>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
             </xsl:when>
-            <xsl:when test="$firstWord='An' or $firstWord='[An'">
-                <nonSort>
-                    <xsl:value-of select="$firstWord"/>
-                </nonSort>
-                <title>
-                    <xsl:value-of select="$restOfTitle"/>
-                </title>   
+            <xsl:when test="matches(., $nonSortArticleRegEx)">
+                <xsl:analyze-string select="$titleText" regex="{$nonSortArticleRegEx}">
+                    <xsl:matching-substring>
+                        <nonSort>
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </nonSort>
+                        <title>
+                            <xsl:value-of select="replace(regex-group(3), '\s+', ' ')"/>
+                        </title>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
             </xsl:when>
-            <xsl:when test="$firstWord='A' or $firstWord='[A'">
-                <nonSort>
-                    <xsl:value-of select="$firstWord"/>
-                </nonSort>
-                <title>
-                    <xsl:value-of select="$restOfTitle"/>
-                </title>   
+            <xsl:when test="matches(., $nonSortPuncRegEx)">
+                <xsl:analyze-string select="$titleText" regex="{$nonSortPuncRegEx}">
+                    <xsl:matching-substring>
+                        <nonSort>
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </nonSort>
+                        <title>
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </title>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
             </xsl:when>
-            <xsl:otherwise>
+             <xsl:otherwise>
                 <title>
                    <xsl:value-of select="." />
                 </title>    
