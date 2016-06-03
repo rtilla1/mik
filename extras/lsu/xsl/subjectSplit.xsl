@@ -47,4 +47,17 @@
         </xsl:for-each>
     </xsl:template>
 
+    <xsl:template match="subject[temporal]">
+        <xsl:variable name="authAttr" select="@authority"/>
+        <xsl:for-each select="tokenize(temporal,';')">
+            <xsl:element name="subject">
+                <xsl:attribute name="authority">
+                    <xsl:value-of select="$authAttr" />
+                </xsl:attribute>
+                <xsl:element name="temporal">
+                    <xsl:value-of select="replace(replace(concat(upper-case(substring(.,1,1)),substring(.,2)), '^\s+|\s+$', ''),'\.$','')"/>
+                </xsl:element>             
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
 </xsl:stylesheet>
