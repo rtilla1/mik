@@ -42,4 +42,19 @@
             </name>
         </xsl:for-each>
     </xsl:template>
+    
+    <xsl:template match="name[@displayLabel='Advisory Committee']">
+        <xsl:for-each select="namePart">
+            <name displayLabel="Advisory Committee">
+                <role>
+                    <roleTerm type="text" authority="marcrelator">Thesis advisor</roleTerm>
+                    <roleTerm type="code" authority="marcrelator">ths</roleTerm>
+                </role>
+                <namePart>
+                    <xsl:value-of select="."/>
+                </namePart>
+            </name>
+        </xsl:for-each>
+    </xsl:template>
+    
 </xsl:stylesheet>
