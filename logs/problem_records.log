@@ -23,3 +23,8 @@
 [2016-06-02 09:53:43] ProblemRecords.ERROR: 17 [] []
 [2016-06-02 09:55:15] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"RTP","last_updated_on":"2016-04-04","last_update_by":"us"}} []
 [2016-06-02 09:57:54] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"OSC","last_updated_on":"2016-04-04","last_update_by":"us"}} []
+[2016-06-02 15:37:19] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"OMSA","last_updated_on":"2016-04-04","last_update_by":"us"}} []
+[2016-06-02 15:56:50] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"JAZ","last_updated_on":"2016-04-04","last_update_by":"us"}} []
+[2016-06-02 15:58:51] ProblemRecords.ERROR: 1095 [] []
+[2016-06-03 08:18:45] ProblemRecords.INFO: Initializing log {"configuration":{"config_id":"JAZ","last_updated_on":"2016-04-04","last_update_by":"us"}} []
+[2016-06-03 08:19:55] ProblemRecords.ERROR: 1095 [] []
