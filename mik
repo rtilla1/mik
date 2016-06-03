@@ -14,7 +14,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 } else {
     $onWindows = false;
 }
-
+    
 // Monolog requires that the date.timezone PHP setting be set else
 // it will create an E_WARNING, which will be turned into an excption 
 // in the set_error_handler function halting the program.
@@ -259,6 +259,31 @@ foreach ($records as $record) {
         }
     }
 }
+
+//We no longer wants saxon running in the background, as 300 javas at the same time.
+//We're doing saxon one directory at a time, one xslt transform at a time.
+$alias_dir = $settings['WRITER']['output_directory'];
+$raw_xslt = $alias_dir . '/' . 'raw_xslt';
+if (!file_exists($raw_xslt)) {
+    mkdir($raw_xslt);
+}
+exec("cp $alias_dir/*.xml $raw_xslt");
+$in_dir = $raw_xslt;
+
+foreach ($settings['XSLT']['stylesheets'] as $xslt) {
+    $xslt_name = new SplFileInfo($xslt);
+    $xslt_name = $xslt_name->getBasename('.xsl');
+    $out_dir = $alias_dir . '/' . $xslt_name;
+    if (!file_exists($out_dir)){
+        mkdir($out_dir);
+    }
+    exec("java -jar saxon9he.jar -s:$in_dir -xsl:$xslt  -o:$out_dir");
+    $in_dir = $out_dir;
+}
+if (!file_exists($alias_dir . "/" . "post_xslt")) {
+    mkdir($alias_dir . "/" . "post_xslt");
+}
+exec("cp $in_dir/*.xml $alias_dir/post_xslt");
 
 echo "Done. Output packages are in " . $settings['WRITER']['output_directory'] .
     ". Log is at "  . $settings['LOGGING']['path_to_log'] . "\n";

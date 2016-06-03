@@ -171,8 +171,8 @@ class AddContentdmData extends MetadataManipulator
               $GetParent->appendChild($cdata);
               $contentdmdata->appendChild($GetParent);
           }             
-
-          return $dom->saveXML($dom->documentElement);
+          $ret = $dom->saveXML($dom->documentElement);
+          return $ret;
         }
         else {
             // If current fragment is not <extension><CONTENTdmData>, return it
@@ -196,7 +196,7 @@ class AddContentdmData extends MetadataManipulator
      * @return stting
      *   The output of the CONTENTdm API request, in the format specified.
      */
-    private function getCdmData($alias, $pointer, $cdm_api_function, $format)
+    protected function getCdmData($alias, $pointer, $cdm_api_function, $format)
     {
           // Use Guzzle to fetch the output of the call to dmGetItemInfo
           // for the current object.
