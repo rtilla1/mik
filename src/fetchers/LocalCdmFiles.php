@@ -190,7 +190,7 @@ class LocalCdmFiles extends Fetcher
     {
         
         $raw_metadata_cache = $this->settings['temp_directory'] . DIRECTORY_SEPARATOR . $pointer . '.metadata';
-        $filepath = $this->settings['FILE_GETTER']['local_dir'] . $this->settings['alias'] . '/' . $pointer . '.json';
+        $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/' . $pointer . '.json';
 
         if (!file_exists($raw_metadata_cache)) {
             $doc = file_get_contents($filepath);

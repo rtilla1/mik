@@ -6,7 +6,7 @@ Physical Description,"<physicalDescription><note type='medium'>%value%</note></p
 Subjects,"<subject authority='lcsh'><topic>%value%</topic></subject>"
 Repository,"<note type='ownership'>%value%</note>"
 Digital Collection,"<relatedItem type='host'><titleInfo displayLabel='Digital Collection'><title>%value%</title></titleInfo></relatedItem>"
-Collection URL,"<relatedItem type='host'><location><url displayLabel='Relation'>http://ldl.lib.lsu.edu/content/mingo-family-african-american-photographs-1887-1955</url></location></relatedItem>"
+null6,"<relatedItem type='host'><location><url displayLabel='Relation'>http://ldl.lib.lsu.edu/content/mingo-family-african-american-photographs-1887-1955</url></location></relatedItem>"
 Repository Collection Guide,"<relatedItem type='host'><location><url displayLabel='Repository Collection Guide'>http://www.lib.lsu.edu/sites/default/files/sc/findaid/5113.pdf</url></location></relatedItem>"
 null1,"<location><physicalLocation authority='oclcorg' displayLabel='OCLC Member Symbol'>LUU</physicalLocation></location>"
 null2,"<location><physicalLocation displayLabel='Physical Location'>Louisiana State University: LSU Libraries</physicalLocation></location>"
