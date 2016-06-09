@@ -34,7 +34,7 @@
     <xsl:variable name="orRegEx" select="'([0-9]{4})\s(or|and)\s([0-9]{4})'"/> <!-- YYYY or YYYY OR YYYY and YYYY OR with brackets-->
     <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
     <xsl:variable name="decadeRegEx" select="'([0-9]{3})-$'"/> <!-- YYY- -->
-    <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
+    <xsl:variable name="decadeQuestionableRegEx" select="'[^0-9]([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
     <xsl:variable name="priorRegEx" select="'prior\sto\s([0-9]{4})'"/>
     
@@ -82,7 +82,7 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </xsl:when>
-            <xsl:when test="matches(., '-') and matches(., 'Ca.')">
+            <xsl:when test="matches(., '-') and not(matches(., 'Ca.'))">
                 <xsl:analyze-string select="$dates" regex="{$yearRangeRegEx}">
                     <xsl:matching-substring>
                         <dateIssued point="start" keyDate="yes" qualifier="approximate">
