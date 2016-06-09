@@ -24,7 +24,7 @@
     <!--<xsl:variable name="dates" select="node()/originInfo/dateIssued/text()"/> -->
     <xsl:variable name="yearRangeRegEx" select="'^([0-9]{4})\s?-\s?([0-9]{4})'"/> <!-- YYYY-YYYY -->
     <xsl:variable name="inferredYearRangeRegEx" select="'\[([0-9]{4})-([0-9]{4})\]'"/> <!-- [YYYY-YYYY] -->
-    <xsl:variable name="caRegEx" select="'\[?[cC]a\.?\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] -->
+    <xsl:variable name="caRegEx" select="'\[?[cC](irc)?a\.?\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] or Ca YYYY or Circa YYYY -->
     <xsl:variable name="caDecadeRegEx" select="'[cC]a.\s?([0-9]{3})(0s|-)'"/> <!-- [Ca. YYYYs] or Ca. YYYYs or Ca. YYY- -->
     <xsl:variable name="caEndRegEx" select="'([0-9]{4})\s[cC]a\.'"/> <!-- YYYY ca. --> 
     <xsl:variable name="betweenRegEx" select="'^[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
@@ -38,6 +38,7 @@
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
     <xsl:variable name="priorRegEx" select="'prior\sto\s([0-9]{4})'"/> <!-- prior to YYYY -->
     <xsl:variable name="questionableRegEx" select="'([0-9]{4})\?'"/> <!-- YYYY? -->
+    
     
     <xsl:template match="originInfo/dateIssued">
         <xsl:choose>
@@ -78,7 +79,7 @@
                 <xsl:analyze-string select="." regex="{$caRegEx}">
                     <xsl:matching-substring>
                         <dateIssued keyDate="yes" qualifier="approximate">
-                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
