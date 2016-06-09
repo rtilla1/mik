@@ -23,6 +23,10 @@
             </xsl:when>
             <xsl:when test="namePart = 'unknown'">                
             </xsl:when>
+            <xsl:when test="namePart = 'Creator unknown'">                
+            </xsl:when>
+            <xsl:when test="namePart = 'Creator unknown;'">                
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
                     <xsl:copy-of select="@*" />
