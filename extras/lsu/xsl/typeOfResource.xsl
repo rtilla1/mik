@@ -26,6 +26,9 @@
             <xsl:when test="matches(., 'image')">
                 <typeOfResource>still image</typeOfResource>
             </xsl:when>
+            <xsl:when test="matches(., 'audio')">
+                <typeOfResource>sound recording-musical</typeOfResource>
+            </xsl:when>
             <xsl:otherwise>
                 <typeOfResource>
                     <xsl:value-of select="."/>
