@@ -30,8 +30,11 @@
     <xsl:variable name="betweenRegEx" select="'^[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
     <xsl:variable name="approxBetweenRegEx" select="'\[[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})\]'"/> <!-- [Between YYYY and YYYY] or [Between YYYY-YYYY] -->
     <xsl:variable name="semicolonRegEx" select="'(^[0-9]{4});.*([0-9]{4}$)'"/> <!-- YYYY; YYYY (not captured); YYYY -->
+    <xsl:variable name="semicolonYYMMDDRegEx" select="'(^[0-9]{4}\-[0-9]{2}\-[0-9]{2});.*([0-9]{4}\-[0-9]{2}\-[0-9]{2}$)'"/> <!-- YYYY-MM-DD; YYYY-MM-DD (not captured); YYYY-MM-DD -->
     <xsl:variable name="inferredRegEx" select="'\[([0-9]{4})\]'"/> <!-- [YYYY] -->
+    <xsl:variable name="inferredYYMMDDRegEx" select="'\[([0-9]{4}\-[0-9]{2}(\-[0-9]{2})?)\]'"/> <!-- [YYYY-MM] or [YYYY-MM-DD] -->
     <xsl:variable name="orRegEx" select="'([0-9]{4})\s(or|and)\s([0-9]{4})'"/> <!-- YYYY or YYYY OR YYYY and YYYY OR with brackets-->
+    <xsl:variable name="orYYYYMMDDRegEx" select="'([0-9]{4}\-[0-9]{2}(\-[0-9]{2})?)\s(or|and)\s([0-9]{4}\-[0-9]{2}(\-[0-9]{2})?)'"/> <!-- YYYY-MM-DD or YYYY-MM-DD OR YYYY-MM-DD and YYYY-MM-DD OR with brackets-->
     <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
     <xsl:variable name="decadeRegEx" select="'([0-9]{3})-$'"/> <!-- YYY- -->
     <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
@@ -155,8 +158,29 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </xsl:when>
+            <xsl:when test="matches(., $semicolonYYMMDDRegEx)">
+                <xsl:analyze-string select="." regex="{$semicolonYYMMDDRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued point="start" keyDate="yes">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                        <dateIssued point="end">
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
             <xsl:when test="matches(., $inferredRegEx) and not(matches(., '-'))">
                 <xsl:analyze-string select="." regex="{$inferredRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued keyDate="yes" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $inferredYYMMDDRegEx)">
+                <xsl:analyze-string select="." regex="{$inferredYYMMDDRegEx}">
                     <xsl:matching-substring>
                         <dateIssued keyDate="yes" qualifier="inferred">
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
@@ -172,6 +196,18 @@
                         </dateIssued>
                         <dateIssued point="end" qualifier="inferred">
                             <xsl:value-of select="replace(regex-group(3), '\s+', ' ')"/>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $orYYYYMMDDRegEx)">
+                <xsl:analyze-string select="." regex="{$orYYYYMMDDRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued point="start" keyDate="yes" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                        </dateIssued>
+                        <dateIssued point="end" qualifier="inferred">
+                            <xsl:value-of select="replace(regex-group(4), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
