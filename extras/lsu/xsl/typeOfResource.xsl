@@ -17,16 +17,16 @@
     
     <xsl:template match="typeOfResource">
         <xsl:choose>
-            <xsl:when test="matches(., 'Moving Image ')">
+            <xsl:when test="matches(., 'Moving Image ', 'i')">
                 <typeOfResource>moving image</typeOfResource>
             </xsl:when>
-            <xsl:when test="matches(., 'Moving Image')">
+            <xsl:when test="matches(., 'Moving Image', 'i')">
                 <typeOfResource>moving image</typeOfResource>
             </xsl:when>
-            <xsl:when test="matches(., 'image')">
+            <xsl:when test="matches(., 'image', 'i')">
                 <typeOfResource>still image</typeOfResource>
             </xsl:when>
-            <xsl:when test="matches(., 'audio')">
+            <xsl:when test="matches(., 'audio', 'i')">
                 <typeOfResource>sound recording-musical</typeOfResource>
             </xsl:when>
             <xsl:otherwise>
