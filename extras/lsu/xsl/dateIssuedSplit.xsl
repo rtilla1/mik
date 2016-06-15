@@ -22,9 +22,9 @@
     </xsl:template>
     
     <!--<xsl:variable name="dates" select="node()/originInfo/dateIssued/text()"/> -->
-    <xsl:variable name="yearRangeRegEx" select="'^([0-9]{4})\s?-\s?([0-9]{4})'"/> <!-- YYYY-YYYY -->
+    <xsl:variable name="yearRangeRegEx" select="'([0-9]{4})\s?-\s?([0-9]{4})'"/> <!-- YYYY-YYYY or Ca. YYYY-YYYY or [Ca. YYYY-YYYY]-->
     <xsl:variable name="inferredYearRangeRegEx" select="'\[([0-9]{4})-([0-9]{4})\]'"/> <!-- [YYYY-YYYY] -->
-    <xsl:variable name="caRegEx" select="'\[?[cC](irc)?a\.?\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] or Ca YYYY or Circa YYYY -->
+    <xsl:variable name="caRegEx" select="'^\[?[cC](irc)?a\.?\s?([0-9]{4})\]?$'"/> <!-- Ca. YYYY or [Ca. YYYY] or Ca YYYY or Circa YYYY -->
     <xsl:variable name="caDecadeRegEx" select="'[cC]a.\s?([0-9]{3})(0s|-)'"/> <!-- [Ca. YYYYs] or Ca. YYYYs or Ca. YYY- -->
     <xsl:variable name="caEndRegEx" select="'([0-9]{4})\s[cC]a\.'"/> <!-- YYYY ca. --> 
     <xsl:variable name="betweenRegEx" select="'^[bB]etween\s([0-9]{4})(\sand\s|-)([0-9]{4})'"/> <!-- Between YYYY and YYYY -->
@@ -39,7 +39,7 @@
     <xsl:variable name="decadeRegEx" select="'([0-9]{3})-$'"/> <!-- YYY- -->
     <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
-    <xsl:variable name="priorRegEx" select="'prior\sto\s([0-9]{4})'"/> <!-- prior to YYYY -->
+    <xsl:variable name="priorRegEx" select="'[Pp]rior\sto\s([0-9]{4})|[Bb]efore\s([0-9]{4})'"/> <!-- prior to YYYY or before YYYY -->
     <xsl:variable name="questionableRegEx" select="'([0-9]{4})\?'"/> <!-- YYYY? -->
     
     
@@ -254,6 +254,7 @@
                     <xsl:matching-substring>
                         <dateIssued keyDate="yes" point="end">
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
                         </dateIssued>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
