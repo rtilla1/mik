@@ -307,6 +307,9 @@
                 <dateIssued point="start" keydate="yes" qualifier="approximate">1301</dateIssued>
                 <dateIssued point="end" qualifier="approximate">1400</dateIssued>
             </xsl:when>
+            <xsl:when test="matches(., 'no date', 'i')">
+                <!-- delete node by doing nothing on the match -->
+            </xsl:when>
             <xsl:otherwise>
                 <dateIssued keyDate="yes">
                     <xsl:value-of select="."/>
