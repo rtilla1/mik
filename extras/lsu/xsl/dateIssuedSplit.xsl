@@ -41,8 +41,7 @@
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
     <xsl:variable name="priorRegEx" select="'[Pp]rior\sto\s([0-9]{4})|[Bb]efore\s([0-9]{4})'"/> <!-- prior to YYYY or before YYYY -->
     <xsl:variable name="questionableRegEx" select="'([0-9]{4})\?'"/> <!-- YYYY? -->
-    
-    
+       
     <xsl:template match="originInfo/dateIssued">
         <xsl:choose>
             <xsl:when test="matches(., $yearRangeRegEx) and not(matches(., 'Ca.'))">
