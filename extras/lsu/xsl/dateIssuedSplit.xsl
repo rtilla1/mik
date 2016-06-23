@@ -309,6 +309,9 @@
             <xsl:when test="matches(., 'no date', 'i')">
                 <!-- delete node by doing nothing on the match -->
             </xsl:when>
+            <xsl:when test="matches(., 'Uncertain', 'i')">
+                <!-- delete node by doing nothing on the match -->
+            </xsl:when>
             <xsl:otherwise>
                 <dateIssued keyDate="yes">
                     <xsl:value-of select="."/>
