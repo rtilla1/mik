@@ -15,7 +15,6 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:variable name="titleText" select="node()/titleInfo/title/text()"/>
     <xsl:variable name="nonSortArticleRegEx" select="'^([&quot;''\[\(\.{3}]*)(An|A|The)?\s(.+)'"/>
     <xsl:variable name="nonSortPuncRegEx" select="'^([&quot;''\[\(\.{3}]+)(.+)'"/>
     <xsl:variable name="nonSortAQuotRegEx" select="'^(A\s[&quot;])(.+)'"/>  <!-- A " -->
@@ -23,7 +22,7 @@
     <xsl:template match="titleInfo/title">
         <xsl:choose>
             <xsl:when test="matches(., $nonSortAQuotRegEx)">
-                <xsl:analyze-string select="$titleText" regex="{$nonSortAQuotRegEx}">
+                <xsl:analyze-string select="." regex="{$nonSortAQuotRegEx}">
                     <xsl:matching-substring>
                         <nonSort>
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
@@ -35,7 +34,7 @@
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:when test="matches(., $nonSortArticleRegEx)">
-                <xsl:analyze-string select="$titleText" regex="{$nonSortArticleRegEx}">
+                <xsl:analyze-string select="." regex="{$nonSortArticleRegEx}">
                     <xsl:matching-substring>
                         <nonSort>
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
@@ -48,7 +47,7 @@
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:when test="matches(., $nonSortPuncRegEx)">
-                <xsl:analyze-string select="$titleText" regex="{$nonSortPuncRegEx}">
+                <xsl:analyze-string select="." regex="{$nonSortPuncRegEx}">
                     <xsl:matching-substring>
                         <nonSort>
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
