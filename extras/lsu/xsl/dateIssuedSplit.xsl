@@ -36,7 +36,8 @@
     <xsl:variable name="orRegEx" select="'([0-9]{4})\s(or|and)\s([0-9]{4})'"/> <!-- YYYY or YYYY OR YYYY and YYYY OR with brackets-->
     <xsl:variable name="orYYYYMMDDRegEx" select="'([0-9]{4}\-[0-9]{2}(\-[0-9]{2})?)\s(or|and)\s([0-9]{4}\-[0-9]{2}(\-[0-9]{2})?)'"/> <!-- YYYY-MM-DD or YYYY-MM-DD OR YYYY-MM-DD and YYYY-MM-DD OR with brackets-->
     <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
-    <xsl:variable name="decadeRegEx" select="'([0-9]{3})-$'"/> <!-- YYY- -->
+    <xsl:variable name="decadeRegEx" select="'^([0-9]{3})-$'"/> <!-- YYY- -->
+    <xsl:variable name="decadeSsRegEx" select="'^([0-9]{3})(0s|-)'"/> <!-- YYY0s -->
     <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
     <xsl:variable name="priorRegEx" select="'[Pp]rior\sto\s([0-9]{4})|[Bb]efore\s([0-9]{4})'"/> <!-- prior to YYYY or before YYYY -->
@@ -115,6 +116,20 @@
                             <xsl:text>0</xsl:text>
                         </dateIssued>
                         <dateIssued point="end" qualifier="approximate">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                            <xsl:text>9</xsl:text>
+                        </dateIssued>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $decadeSsRegEx)">
+                <xsl:analyze-string select="." regex="{$decadeSsRegEx}">
+                    <xsl:matching-substring>
+                        <dateIssued point="start" keyDate="yes">
+                            <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
+                            <xsl:text>0</xsl:text>
+                        </dateIssued>
+                        <dateIssued point="end">
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
                             <xsl:text>9</xsl:text>
                         </dateIssued>
@@ -261,6 +276,10 @@
             <xsl:when test="matches(., 'early 20th century', 'i')">
                 <dateIssued point="start" keydate="yes" qualifier="approximate">1901</dateIssued>
                 <dateIssued point="end" qualifier="approximate">1939</dateIssued>
+            </xsl:when>
+            <xsl:when test="matches(., 'late 20th century', 'i')">
+                <dateIssued point="start" keydate="yes" qualifier="approximate">1960</dateIssued>
+                <dateIssued point="end" qualifier="approximate">2000</dateIssued>
             </xsl:when>
             <xsl:when test="matches(., 'mid-20th century', 'i')">
                 <dateIssued point="start" keydate="yes" qualifier="approximate">1930</dateIssued>
