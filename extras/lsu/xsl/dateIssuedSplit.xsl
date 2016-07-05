@@ -37,7 +37,7 @@
     <xsl:variable name="historicalRegEx" select="'([0-9]{4})\s\(historical\)|([0-9]{4}-[0-9]{2}-[0-9]{2})\s\(historical\)'"/> <!-- YYYY (historical) -->
     <xsl:variable name="decadeRegEx" select="'^([0-9]{3})-$'"/> <!-- YYY- -->
     <xsl:variable name="decadeSsRegEx" select="'^([0-9]{3})(0s|-)'"/> <!-- YYY0s -->
-    <xsl:variable name="decadeQuestionableRegEx" select="'([0-9]{3})-?\?'"/> <!-- YYY? or YYY-? -->
+    <xsl:variable name="decadeQuestionableRegEx" select="'^([0-9]{3})-?\(?\?\)?'"/> <!-- YYY? or YYY-? -->
     <xsl:variable name="centuryRegEx" select="'([0-9]{2})th\s[cC]entury'"/> <!-- YYth century -->
     <xsl:variable name="priorRegEx" select="'[Pp]rior\sto\s([0-9]{4})|[Bb]efore\s([0-9]{4})'"/> <!-- prior to YYYY or before YYYY -->
     <xsl:variable name="questionableRegEx" select="'([0-9]{4})\(?\?\)?'"/> <!-- YYYY? or YYYY(?) -->
