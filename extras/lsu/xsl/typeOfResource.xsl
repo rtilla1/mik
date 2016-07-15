@@ -17,9 +17,6 @@
     
     <xsl:template match="typeOfResource">
         <xsl:choose>
-            <xsl:when test="matches(., 'Moving Image ', 'i')">
-                <typeOfResource>moving image</typeOfResource>
-            </xsl:when>
             <xsl:when test="matches(., 'Moving Image', 'i')">
                 <typeOfResource>moving image</typeOfResource>
             </xsl:when>
@@ -28,6 +25,12 @@
             </xsl:when>
             <xsl:when test="matches(., 'audio', 'i')">
                 <typeOfResource>sound recording-musical</typeOfResource>
+            </xsl:when>
+            <xsl:when test="matches(., 'physical object', 'i')">
+                <typeOfResource>three dimensional object</typeOfResource>
+            </xsl:when>
+            <xsl:when test="matches(., 'text', 'i')">
+                <typeOfResource>text</typeOfResource>
             </xsl:when>
             <xsl:otherwise>
                 <typeOfResource>
