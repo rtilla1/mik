@@ -15,7 +15,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="text()">
+    <xsl:template match="text()" priority="2">
         <xsl:value-of select="replace(.,'@@@','&quot;')"/>
     </xsl:template>
 
