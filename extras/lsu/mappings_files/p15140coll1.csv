@@ -6,7 +6,7 @@ Credit,"<accessCondition type='use and reproduction' displayLabel='Credit'>%valu
 Description,"<abstract displayLabel='Description'>%value%</abstract>"
 Date,"<originInfo><dateIssued keyDate='yes'>%value%</dateIssued></originInfo>"
 Type,"<typeOfResource>still image</typeOfResource>"
-null5,"<physicalDescription><internetMediaType>jp2</internetMediaType></physicalDescription>"
+null7,"<physicalDescription><internetMediaType>jp2</internetMediaType></physicalDescription>"
 Format,"<physicalDescription><note type='medium'>%value%</note></physicalDescription>"
 Language,"<language><languageTerm type='code'>%value%</languageTerm></language>"
 Source,"<note type='ownership' displayLabel='Repository'>The Historic New Orleans Collection (http://www.hnoc.org)</note>"
@@ -29,3 +29,4 @@ null1,"<location><physicalLocation authority='oclcorg' displayLabel='OCLC Member
 null2,"<location><physicalLocation displayLabel='Physical Location'>The Historic New Orleans Collection</physicalLocation></location>"
 null3,"<location><url displayLabel='Institution Web Site'>http://www.hnoc.org</url></location>"
 null4,"<location><holdingSimple><copyInformation><subLocation>Williams Research Center</subLocation></copyInformation></holdingSimple></location>"
+null5,"<extension><CONTENTdmData></CONTENTdmData></extension>"
