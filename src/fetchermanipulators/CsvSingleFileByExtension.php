@@ -55,7 +55,6 @@ class CsvSingleFileByExtension extends FetcherManipulator
         $record_num = 0;
         $filtered_records = array();
         foreach ($records as $record) {
-            // var_dump($record);
             $ext = pathinfo($record->{$this->file_name_field}, PATHINFO_EXTENSION);
             if (in_array($ext, $this->allowed_extensions)) {
                 $filtered_records[] = $record;

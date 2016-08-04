@@ -69,7 +69,7 @@ class AddAllContentdmData extends MetadataManipulator
         // Test to see if the current fragment is <extension><CONTENTdmData>.
         $xpath = new \DOMXPath($dom);
         $cdmdatas = $xpath->query("//extension/CONTENTdmData");
-//var_dump($input); die();
+
         // There should only be one <CONTENTdmData> fragment in the incoming
         // XML. If there is 0 or more than 1, return the original.
         if ($cdmdatas->length === 1) {

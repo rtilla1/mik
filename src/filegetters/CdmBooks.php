@@ -62,8 +62,7 @@ class CdmBooks extends FileGetter
                 ->getBookMasterFiles($inputDirectory);
             $potentialObjFiles = array_merge($potentialObjFiles, $potentialObjFilesPart);
         }
-        //var_dump($potentialObjFiles);
-        //exit();
+
         $this->OBJFilePaths = $this->determineObjItems($potentialObjFiles);
         // information and methods for thumbnail minipulation
         $this->thumbnail = new \mik\filemanipulators\ThumbnailFromCdm($settings);

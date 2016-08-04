@@ -79,7 +79,6 @@ class AddContentdmData extends MetadataManipulator
           $contentdmdata->appendChild($pointer);          
 
           $timestamp = date("Y-m-d H:i:s");
-
           // Add the <dmGetItemInfo> element.
           $dmGetItemInfo = $dom->createElement('dmGetItemInfo');
           $now = $dom->createAttribute('timestamp');
@@ -93,9 +92,9 @@ class AddContentdmData extends MetadataManipulator
           $source = $dom->createAttribute('source');
           $source->value = $source_url;          
           $dmGetItemInfo->appendChild($source);
-          $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');
-          if ($this->settings['FETCHER']['class'] == 'LocalCdmFiles') {
-              $source = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->alias .DIRECTORY_SEPARATOR. $this->record_key . '.json';
+//          $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');
+          if (($this->settings['FETCHER']['class'] == 'LocalCdmFiles') and ($this->settings['FILE_GETTER']['class'] == 'CdmSingleFile')) {
+              $source = $this->settings['FILE_GETTER']['local_dir'] . '/' . $this->alias . '/' . $this->record_key . '.json';
               $item_info = file_get_contents($source);
           } 
           elseif ($this->settings['FETCHER']['class'] == 'Cdm') {

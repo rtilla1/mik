@@ -186,21 +186,23 @@ class LocalCdmFiles extends Fetcher
      *
      * @return array|bool 
      */
-    public function getItemInfo($pointer)
-    {
-        
-        $raw_metadata_cache = $this->settings['temp_directory'] . DIRECTORY_SEPARATOR . $pointer . '.metadata';
-        $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/' . $pointer . '.json';
+    public function getItemInfo($pointer, $parent = null) {
 
-        if (!file_exists($raw_metadata_cache)) {
-            $doc = file_get_contents($filepath);
-            $itemInfo = json_decode($doc, true);
-            file_put_contents($raw_metadata_cache, serialize($itemInfo));
+        if (($this->settings['FILE_GETTER']['class'] == "CdmSingleFile")) {
+           $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/' . $pointer . '.json';
+        } elseif (($this->settings['FILE_GETTER']['class'] == "LocalCdmCompound")) {
+            if (!$parent) {
+                $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/Cpd/' . $pointer . '.json';}
+           else {
+               $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/Cpd/' . $parent . '/' . $pointer . '.json'; 
+           }
         }
-        
-        $filepath = $this->settings['FILE_GETTER']['local_dir'] . DIRECTORY_SEPARATOR . $this->settings['alias'] . '/' . $pointer . '.json';
+
+        $raw_metadata_cache = $this->settings['temp_directory'] . DIRECTORY_SEPARATOR . $pointer . '.metadata';        
         $doc = file_get_contents($filepath);
         $itemInfo = json_decode($doc, true);
+        file_put_contents($raw_metadata_cache, serialize($itemInfo));
+
         if (is_array($itemInfo)) {
             return $itemInfo;
         } else {

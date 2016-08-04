@@ -140,8 +140,9 @@ class CdmToMods extends Mods
             }
             $CONTENTdmField = $valueArray[0];
 
-            // indicates last mappings line to run (E.g., which caused mik to crash)
-            var_dump($CONTENTdmField);
+            // indicates last mappings line to run 
+            // (i.e., which mapping line caused mik to crash)
+            echo $CONTENTdmField . "\n";
 
             $insensitiveMatch = function() use ($CONTENTdmFieldValuesArray, $key) {
                 foreach ($CONTENTdmFieldValuesArray as $cdmkey=>$cdmvalue) {
@@ -152,21 +153,21 @@ class CdmToMods extends Mods
                 return false;
             };
             $fieldValue = $insensitiveMatch();
-            if ($fieldValue) { // workaround for passing when $fieldValue assigned by insensitiveMatch
-                if (isset($CONTENTdmFieldValuesArray[$CONTENTdmField])) {
-                    $fieldValue = $CONTENTdmFieldValuesArray[$CONTENTdmField];
+            if ((!$fieldValue) && (isset($CONTENTdmFieldValuesArray[$CONTENTdmField]))) {
+                    continue;
                 }
-            }
-            elseif (preg_match("/(null)\d+/i", $key)) {
+            if (preg_match("/(null)\d+/i", $key)) {
                 // Special source field name for mappings to static snippets.
                 $fieldValue = '';
-            } else {
+            }
+            
+            if (($fieldValue == '') & (preg_match("/(null)\d+/i", $key) == 0)) {
                 // Log mismatch between mapping file and source fields (e.g., CDM).
                 $logMessage = "Mappings file contains a row $CONTENTdmField that ";
                 $logMessage .= "is not in source CONTENTdm metadata for this object.";
                 $this->log->addWarning($logMessage, array('Source fieldname' => $CONTENTdmField));
                 continue;
-            }
+                }
 
             if (is_array($fieldValue) && empty($fieldValue)) {
                 // The JSON returned was like "key": {}.
@@ -206,6 +207,7 @@ class CdmToMods extends Mods
                 $modsOpeningTag .= $xmlSnippet;
             } else {
                 // Determine if we need to store the CONTENTdm_field as an identifier.
+                continue;
             }
         }
 
@@ -219,7 +221,7 @@ class CdmToMods extends Mods
             $CONTENTdmItemUrl .= $collectionAlias. '/id/'. $itemId .'</identifier>';
             $modsOpeningTag .= $CONTENTdmItemUrl;
         }
-
+        
         $modsString = $modsOpeningTag . '</mods>';
         
         $modsString = $this->oneParentWrapperElement($modsString);
@@ -570,7 +572,6 @@ class CdmToMods extends Mods
             $metadatamanipulator = new $metdataManipulatorClass($this->settings, $manipulatorParams, $record_key);
             $xmlSnippet = $metadatamanipulator->manipulate($xmlSnippet);
         }   
-
         return $xmlSnippet;
     }
 
@@ -638,9 +639,9 @@ class CdmToMods extends Mods
         return json_decode($json, true);
     }
 
-    public function metadata($pointer)
+    public function metadata($pointer, $parent_key = null)
     {
-        $objectInfo = $this->fetcher->getItemInfo($pointer);
+        $objectInfo = $this->fetcher->getItemInfo($pointer, $parent_key);
         $objectInfo['pointer'] = $pointer;
         $this->CONTENTdmFieldValuesArray = $this->createCONTENTdmFieldValuesArray($objectInfo);
         $collectionMappingArray = $this->collectionMappingArray;
