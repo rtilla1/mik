@@ -1,8 +1,8 @@
-/vendor/
+vendor/
 composer.*
 .vagrant/*
-/nbproject/*
+nbproject/*
 output/*
 Cached_Cdm_files/*
-logs/*
 log/*
+logs/*
