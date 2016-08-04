@@ -125,8 +125,6 @@ class CdmBooks extends Writer
 
             // Create subdirectory for each page of newspaper issue
             $page_object_info = $this->fetcher->getItemInfo($page_pointer);
-
-            //var_dump($page_object_info);
             
             if ($OBJ_expected xor $no_datastreams_setting_flag) {
                 $filekey = $sub_dir_num - 1;
@@ -151,7 +149,7 @@ class CdmBooks extends Writer
             }
             
             $page_dir = $issueObjectPath  . DIRECTORY_SEPARATOR . $directoryNumber;
-            //var_dump($page_dir);
+
             // Create a directory for each day of the newspaper.
             if (!file_exists($page_dir)) {
                 mkdir($page_dir, 0777, true);
@@ -389,7 +387,7 @@ class CdmBooks extends Writer
             if ($filecreationStatus === false) {
                 echo "There was a problem exporting the metadata to a file.\n";
             } else {
-                // echo "Exporting metadata file.\n";
+                 echo "Exporting metadata file.\n";
             }
         }
     }

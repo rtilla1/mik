@@ -98,31 +98,35 @@ class CdmCompound extends Writer
             $childObjectPath = $this->createObjectOutputDirectory($child_pointer, true);
             // We can use the CdmSingleFile filegetter class since CONTENTdm
             // compound objects are made up of single file objects.
-            // $this->cdmSingleFileGetter = new CdmSingleFile($this->cdmSingleFileGetterSettings);
-            $temp_file_path = $this->cdmSingleFileGetter->getFileContent($child_pointer);
-
+            
             try {
-                // Get the filename used by CONTENTdm (stored in the 'find' field)
-                // so we can grab the extension.
-                $item_info = $this->fetcher->getItemInfo($child_pointer);
-                $source_file_extension = pathinfo($item_info['find'], PATHINFO_EXTENSION);
-                $output_file_path = $childObjectPath . DIRECTORY_SEPARATOR . 'OBJ' . '.' . $source_file_extension;
-                rename($temp_file_path, $output_file_path);
-            }
-            catch (Exception $e) {
-                $this->log->addError("CdmCommpound writer error",
-                    array('Error writing child content file' => $e->getMessage()));
-            }
-
-            // Write out the children's metadata file.
-            try {
-                $child_metadata = $this->metadataParser->metadata($child_pointer);
+                $child_metadata = $this->metadataParser->metadata($child_pointer, $record_key);
                 $this->writeMetadataFile($child_metadata, $childObjectPath);
             }
             catch (Exception $e) {
               $this->log->addError("CdmCommpound writer error",
                   array('Error writing child metadata file' => $e->getMessage()));
-            }            
+            }         
+
+            if ($this->cdmSingleFileGetterSettings['WRITER']['datastreams'][0] == "MODS") {
+                continue;
+            } else {
+                $temp_file_path = $this->cdmSingleFileGetter->getFileContent($child_pointer);
+                try {
+                    // Get the filename used by CONTENTdm (stored in the 'find' field)
+                    // so we can grab the extension.
+                    $item_info = $this->fetcher->getItemInfo($child_pointer);
+                    $source_file_extension = pathinfo($item_info['find'], PATHINFO_EXTENSION);
+                    $output_file_path = $childObjectPath . DIRECTORY_SEPARATOR . 'OBJ' . '.' . $source_file_extension;
+                    rename($temp_file_path, $output_file_path);
+                }
+                catch (Exception $e) {
+                    $this->log->addError("CdmCommpound writer error",
+                        array('Error writing child content file' => $e->getMessage()));
+                }
+            }
+
+   
 
         }
 
@@ -172,7 +176,7 @@ class CdmCompound extends Writer
 
     public function writeMetadataFile($metadata, $path)
     {
-        // Add XML decleration
+        // Only parent of compound object's metadata does here.  Vrai??
         $doc = new \DomDocument('1.0');
         $doc->loadXML($metadata);
         $doc->formatOutput = true;
