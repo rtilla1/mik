@@ -55,7 +55,7 @@ def count_observed_compounds(alias):
             output_dir = '{}/original_structure/'.format(root)
             compounds_count = 0
             for root, dirs, files in os.walk(output_dir):
-                compounds_count += len([i for i in files if ".xml" in i])
+                compounds_count += len([i for i in files if i == "MODS.xml"])
             return compounds_count
 
 if __name__ == '__main__':
