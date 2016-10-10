@@ -57,7 +57,7 @@ class CsvSingleFile extends Writer
 
         // Retrieve the file associated with the document and write it to the output
         // folder using the filename or record_id identifier
-        $source_file_path = $this->fileGetter->getFilePath($record_id);
+        $source_file_path = $this->fileGetter->getFilePath($record_id).'.jp2';
 
 	// But first, check to see if the source file exists, and if it doesn't, log
 	// that fact and skip writing the package.
