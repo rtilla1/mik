@@ -180,12 +180,20 @@ try {
     );
 }
 
+// clear temp directory specified in Fetcher.temp_directory
+delete_remake_dir($settings['FETCHER']['temp_directory']);
 
 $record_num = 0;
+$alias = $settings['FETCHER']['alias'];
+$base_dir = $settings['WRITER']['output_directory'];
+delete_remake_dir($base_dir);
 foreach ($records as $record) {
     $record_key = $record->key;
     if (strlen($record_key) == 0) {
         continue;
+    }
+    if (isset($options['limit']) && ($record_num == $limit)) {
+        break;
     }
 
     // Slow down execution if configured to do so.
@@ -271,6 +279,71 @@ foreach ($records as $record) {
     }
 }
 
+
+
+// SAXON prep & execution:
+// emptying and/or creating a temp dir with all mods files
+// --flattened so that saxon can work.
+$alias_dir = $settings['WRITER']['output_directory'];
+$flattened_dir = "/tmp/presaxon_flat_output";
+delete_remake_dir($flattened_dir);
+
+$dir_iterator = new RecursiveDirectoryIterator($alias_dir);
+foreach(new RecursiveIteratorIterator($dir_iterator) as $file) {
+    $filepath = $file->getPath();
+    $filename = $file->getFilename();
+    if ($filename == "MODS.xml") {
+        $exploded_path = explode("/", $filepath);
+        $containing_directory = end($exploded_path);
+        exec("cp $file $flattened_dir/$containing_directory.xml");
+    }
+    elseif (preg_match("/[0-9]+.xml/", $filename)) {
+        exec("cp $file $flattened_dir/$filename");
+    }
+}
+//the mods are stored in /tmp where saxon can modify them as a folder.
+//We are now moving the original mods output into output/alias/original_structure,
+//so that we may retain the folder structure without the complication of saxon output
+//which also outputs folders into output/alias
+$reference_structure = "$base_dir" . '/' . "original_structure";
+mkdir("$reference_structure");
+
+exec("mv $base_dir/* $reference_structure/");
+exec("mv $reference_structure/*.log $base_dir");
+echo "ignore the above two messages about cannot copy file/folder etc\n";
+
+//creating Java Virtualmachine running Saxon for each xslt, entire output directory at a time.
+$presaxon_flat_dir = $alias_dir . '/' . 'presaxon_flat_output';
+delete_remake_dir($presaxon_flat_dir);
+exec("cp $flattened_dir/*.xml $presaxon_flat_dir");
+$in_dir = $presaxon_flat_dir;
+
+foreach ($settings['XSLT']['stylesheets'] as $xslt) {
+    $xslt_name = new SplFileInfo($xslt);
+    $xslt_name = $xslt_name->getBasename('.xsl');
+    $out_dir = $alias_dir . '/' . $xslt_name;
+    delete_remake_dir($out_dir);
+    exec("java -jar saxon9he.jar -s:$in_dir -xsl:$xslt  -o:$out_dir");
+    $in_dir = $out_dir;
+}
+// moving xslt transformed files back into original folder structure
+$dir_iterator = new RecursiveDirectoryIterator($reference_structure);
+foreach(new RecursiveIteratorIterator($dir_iterator) as $file) {
+    $filepath = $file->getPath();
+    $filename = $file->getFilename();
+    if ($filename == "MODS.xml") {
+        $exploded_path = explode("/", $filepath);
+        $containing_directory = end($exploded_path);
+        exec("cp $out_dir/$containing_directory.xml $filepath/MODS.xml");
+    }
+    elseif (preg_match("/[0-9]+.xml/", $filename)) {
+        exec("cp $out_dir/$filename $filepath/$filename");
+    }
+}
+
+rrmdir($settings['FETCHER']['temp_directory']);
+rrmdir($flattened_dir);
+
 echo "Done. Output packages are in " . $settings['WRITER']['output_directory'] .
     ". Log is at "  . $settings['LOGGING']['path_to_log'] . "\n";
 
@@ -288,3 +361,28 @@ $timeMessage =  "Completed in " . $time/60 . " minutes." . PHP_EOL;
 echo $timeMessage;
 $logInfo->addInfo($timeMessage);
 
+
+function delete_remake_dir($path) {
+    if (file_exists($path)) {
+        rrmdir($path);
+    }
+    echo "\n" . $path . "\n";
+    mkdir($path);
+}
+
+function rrmdir($src) {
+    $dir = opendir($src);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            $full = $src . '/' . $file;
+            if ( is_dir($full) ) {
+                rrmdir($full);
+            }
+            else {
+                unlink($full);
+            }
+        }
+    }
+    closedir($dir);
+    rmdir($src);
+}
