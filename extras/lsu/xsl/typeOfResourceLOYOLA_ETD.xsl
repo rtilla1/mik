@@ -7,7 +7,7 @@
     version="2.0"
     xmlns="http://www.loc.gov/mods/v3">
     
-    <!-- fits typeOfResource to authorized terms -->
+    <!-- fits typeOfResource to authorized terms specifically for loyno-etd collection -->
     
     <xsl:template match="@* | node()">
         <xsl:copy>
@@ -17,19 +17,13 @@
     
     <xsl:template match="typeOfResource">
         <xsl:choose>
-            <xsl:when test="matches(., 'Moving Image', 'i')">
+            <xsl:when test="matches(., 'Interactive Resource;', 'i')">
                 <typeOfResource>moving image</typeOfResource>
             </xsl:when>
-            <xsl:when test="matches(., 'image', 'i')">
+            <xsl:when test="matches(., 'Image', 'i')">
                 <typeOfResource>still image</typeOfResource>
             </xsl:when>
-            <xsl:when test="matches(., 'audio', 'i')">
-                <typeOfResource>sound recording-musical</typeOfResource>
-            </xsl:when>
-            <xsl:when test="matches(., 'physical object', 'i')">
-                <typeOfResource>three dimensional object</typeOfResource>
-            </xsl:when>
-            <xsl:when test="matches(., 'text', 'i')">
+            <xsl:when test="matches(., 'Text', 'i')">
                 <typeOfResource>text</typeOfResource>
             </xsl:when>
             <xsl:otherwise>
