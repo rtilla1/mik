@@ -1,5 +1,5 @@
 <?php
-// src/metadatamanipulators/AddContentdmData.php
+// src/metadatamanipulators/AddLocalContentdmData.php
 
 namespace mik\metadatamanipulators;
 use GuzzleHttp\Client;
@@ -20,7 +20,7 @@ use \Monolog\Logger;
  *
  * This metadata manipulator takes no configuration parameters.
  */
-class AddContentdmData extends MetadataManipulator
+class AddLocalContentdmData extends MetadataManipulator
 {
     /**
      * @var string $record_key - the unique identifier for the metadata
@@ -61,117 +61,68 @@ class AddContentdmData extends MetadataManipulator
      */
     public function manipulate($input)
     {
-        $dom = new \DomDocument();
+        $dom = new \DOMDocument();
         $dom->loadxml($input, LIBXML_NSCLEAN);
-
         // Test to see if the current fragment is <extension><CONTENTdmData>.
         $xpath = new \DOMXPath($dom);
+        
         $cdmdatas = $xpath->query("//extension/CONTENTdmData");
-
         // There should only be one <CONTENTdmData> fragment in the incoming
         // XML. If there is 0 or more than 1, return the original.
         if ($cdmdatas->length === 1) {
           $contentdmdata = $cdmdatas->item(0);
-
           $alias = $dom->createElement('alias', $this->alias);
           $contentdmdata->appendChild($alias);
           $pointer = $dom->createElement('pointer', $this->record_key);
           $contentdmdata->appendChild($pointer);          
 
-          $timestamp = date("Y-m-d H:i:s");
+          
           // Add the <dmGetItemInfo> element.
           $dmGetItemInfo = $dom->createElement('dmGetItemInfo');
-          $now = $dom->createAttribute('timestamp');
-          $now->value = $timestamp;
-          $dmGetItemInfo->appendChild($now);
-          $mimetype = $dom->createAttribute('mimetype');
-          $mimetype->value = 'application/json';
-          $dmGetItemInfo->appendChild($mimetype);          
+          $dmGetItemInfo->setAttribute('timestamp', date("Y-m-d H:i:s"));
+          $dmGetItemInfo->setAttribute("mimetype", 'application/json');          
           $source_url = $this->settings['METADATA_PARSER']['ws_url'] .
-              'dmGetItemInfo/' . $this->alias . '/' . $this->record_key . '/json';
-          $source = $dom->createAttribute('source');
-          $source->value = $source_url;          
-          $dmGetItemInfo->appendChild($source);
-//          $item_info = $this->getCdmData($this->alias, $this->record_key, 'dmGetItemInfo', 'json');
-          if (($this->settings['FETCHER']['class'] == 'LocalCdmFiles') and ($this->settings['FILE_GETTER']['class'] == 'CdmSingleFile')) {
-              $source = $this->settings['FILE_GETTER']['local_dir'] . '/' . $this->alias . '/' . $this->record_key . '.json';
-              $item_info = file_get_contents($source);
-          } 
-          elseif ($this->settings['FETCHER']['class'] == 'Cdm') {
-            $item_info = file_get_contents($source_url, false, null);
-          }
+              'dmGetItemInfo/' . $this->alias . '/' . $this->record_key . '/json';       
+          $dmGetItemInfo->setAttribute('source', $source_url);
+          $item_info = $this->getCdmData(sprintf("%s.json", $this->record_key));          
           
-          // CONTENTdm returns a 200 OK with its error messages, so we can't rely
-          // on catching all 'errors' with the above try/catch block. Instead, we
-          // check to see if the string 'dmcreated' (one of the metadata fields
-          // returned for every object) is in the response body. If it's not,
-          // assume CONTENTdm has returned an error of some sort, log it, and
-          // return.
-          if (!preg_match('/dmcreated/', $item_info)) {
-              $this->log->addInfo("AddContentdmData", array('CONTENTdm internal error' => $item_info));
-              return '';
-          }          
-          // If the CONTENTdm metadata contains the CDATA end delimiter, log and return.
-          if (preg_match('/\]\]>/', $item_info)) {
-              $message = "CONTENTdm metadata for object " . $this->settings['METADATA_PARSER']['alias'] .
-                  '/' . $this->record_key . ' contains the CDATA end delimiter ]]>'; 
-              $this->log->addInfo("AddContentdmData", array('CONTENTdm metadata warning' => $message));
-              return '';
-          }
-          // If we've made it this far, add the output of dmGetItemInfo to <CONTENTdmData> as
-          // CDATA and return the modified XML fragment.
           if (strlen($item_info)) {
               $cdata = $dom->createCDATASection($item_info);
               $dmGetItemInfo->appendChild($cdata);
               $contentdmdata->appendChild($dmGetItemInfo);
           }
-
           // Add the <dmCompoundObjectInfo> element.
           $dmGetCompoundObjectInfo = $dom->createElement('dmGetCompoundObjectInfo');
-          $now = $dom->createAttribute('timestamp');
-          $now->value = $timestamp;
-          $dmGetCompoundObjectInfo->appendChild($now);
-          $mimetype = $dom->createAttribute('mimetype');
-          $mimetype->value = 'text/xml';
-          $dmGetCompoundObjectInfo->appendChild($mimetype);
-          $source = $dom->createAttribute('source');
+          $dmGetCompoundObjectInfo->setAttribute('timestamp', date("Y-m-d H:i:s"));
+          $dmGetCompoundObjectInfo->setAttribute('mimetype', 'text/xml');
           $source_url = $this->settings['METADATA_PARSER']['ws_url'] .
               'dmGetCompoundObjectInfo/' . $this->alias . '/' . $this->record_key . '/xml';
-          $source->value = $source_url;
-          $dmGetCompoundObjectInfo->appendChild($source);   
-          $compound_object_info = $this->getCdmData($this->alias, $this->record_key,
-              'dmGetCompoundObjectInfo', 'xml');
+          $dmGetCompoundObjectInfo->setAttribute('source', $source_url);   
+          $compound_object_info = $this->getCdmData(sprintf("%s_cpd.xml", $this->record_key));
           // Only add the <dmGetCompoundObjectInfo> element if the object is compound.
           if (strlen($compound_object_info) && preg_match('/<cpd>/', $compound_object_info)) {
               $cdata = $dom->createCDATASection($compound_object_info);
               $dmGetCompoundObjectInfo->appendChild($cdata);
               $contentdmdata->appendChild($dmGetCompoundObjectInfo);
           }
-
+          
           // Add the <GetParent> element.
           $GetParent = $dom->createElement('GetParent');
-          $now = $dom->createAttribute('timestamp');
-          $now->value = $timestamp;
-          $GetParent->appendChild($now);
-          $mimetype = $dom->createAttribute('mimetype');
-          $mimetype->value = 'text/xml';
-          $GetParent->appendChild($mimetype);
-          $source = $dom->createAttribute('source');
+          $GetParent->setAttribute('timestamp', date("Y-m-d H:i:s"));
+          $GetParent->setAttribute('mimetype', 'text/xml');
           $source_url = $this->settings['METADATA_PARSER']['ws_url'] .
               'GetParent/' . $this->alias . '/' . $this->record_key . '/xml';
-          $source->value = $source_url;
-          $GetParent->appendChild($source);                  
-          $parent_info = $this->getCdmData($this->alias, $this->record_key,
-              'GetParent', 'xml');
+          $GetParent->setAttribute('source', $source_url);    
+          $parent_info = $this->getCdmData(sprintf("%s_parent.xml", $this->record_key));
           // Only add the <GetParent> element if the object has a parent
           // pointer of not -1.
           if (strlen($parent_info) && !preg_match('/\-1/', $parent_info)) {
               $cdata = $dom->createCDATASection($parent_info);
               $GetParent->appendChild($cdata);
               $contentdmdata->appendChild($GetParent);
-          }             
-          $ret = $dom->saveXML($dom->documentElement);
-          return $ret;
+          }
+          
+          return $dom->saveXML($dom->documentElement);
         }
         else {
             // If current fragment is not <extension><CONTENTdmData>, return it
@@ -195,22 +146,17 @@ class AddContentdmData extends MetadataManipulator
      * @return stting
      *   The output of the CONTENTdm API request, in the format specified.
      */
-    protected function getCdmData($alias, $pointer, $cdm_api_function, $format)
-    {
-          // Use Guzzle to fetch the output of the call to dmGetItemInfo
-          // for the current object.
-          $url = $this->settings['METADATA_PARSER']['ws_url'] .
-              $cdm_api_function . '/' . $this->alias . '/' . $pointer . '/' . $format;
-          $client = new Client();
-          try {
-              $response = $client->get($url);
-          } catch (Exception $e) {
-              $this->log->addInfo("AddContentdmData",
-                  array('HTTP request error' => $e->getMessage()));
-              return '';
-          }
-          $output = $response->getBody();
-          return $output;
-    }
-
+    protected function getCdmData($sought_file) {
+        $source_dir = "Cached_Cdm_files/" . $this->settings['FETCHER']['alias'];
+        $dir_iterator = new \RecursiveDirectoryIterator($source_dir);
+        foreach(new \RecursiveIteratorIterator($dir_iterator) as $file) {
+            $filepath = $file->getPath();
+            $filename = $file->getFilename();
+            if ($sought_file == $filename) {
+                $cdmData = file_get_contents("$filepath/$filename");
+                return $cdmData;
+            }
+        }
+        return false;
+    }    
 }
