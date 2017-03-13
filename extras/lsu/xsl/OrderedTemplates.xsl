@@ -20,10 +20,14 @@
             <xsl:apply-templates select="titleInfo" />
             <xsl:apply-templates select="part" />
             <xsl:apply-templates select="name" />
+            <xsl:apply-templates select="note[@type='statement of responsibility']"/>
+            <xsl:apply-templates select="note[@type='biographical/historical']"/>
+            <xsl:apply-templates select="note[@type='thesis']"/>
             <xsl:apply-templates select="originInfo" />
             <xsl:apply-templates select="subject" />
             <xsl:apply-templates select="abstract" />
             <xsl:apply-templates select="note[@type='content']"/>
+            <xsl:apply-templates select="note[@type='performers']"/>
             <xsl:apply-templates select="typeOfResource" />
             <xsl:apply-templates select="physicalDescription" />
             <xsl:apply-templates select="genre" />
@@ -32,8 +36,11 @@
             <xsl:apply-templates select="note[@type='ownership']" />
             <xsl:apply-templates select="relatedItem" />
             <xsl:apply-templates select="location" />
+            <xsl:apply-templates select="classification" />
             <xsl:apply-templates select="accessCondition" />
             <xsl:apply-templates select="note[@type='preferred citation']"/>
+            <xsl:apply-templates select="note[@type='citation/reference']"/>
+            <xsl:apply-templates select="note[@type='acquisition']"/>
             <xsl:apply-templates select="identifier" />
             <xsl:apply-templates select="recordInfo" />
             <xsl:apply-templates select="extension" />
