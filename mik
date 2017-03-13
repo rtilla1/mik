@@ -317,6 +317,7 @@ foreach ($records as $record) {
 
 // Runs arbitrary scripts at the end.
 foreach ($settings['CLEANUP']['scripts'] as $cleanup) {
+  $config_path = realpath($configPath);
   $cmd = "$cleanup $config_path";
   $process = new BackgroundProcess($cmd);
   $process->run();
