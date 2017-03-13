@@ -315,6 +315,13 @@ foreach ($records as $record) {
     }
 }
 
+// Runs arbitrary scripts at the end.
+foreach ($settings['CLEANUP']['scripts'] as $cleanup) {
+  $cmd = "$cleanup $config_path";
+  $process = new BackgroundProcess($cmd);
+  $process->run();
+}
+
 echo "Done. Output packages are in " . $settings['WRITER']['output_directory'] .
     ". Log is at "  . $settings['LOGGING']['path_to_log'] . "\n";
 
