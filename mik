@@ -317,9 +317,9 @@ foreach ($records as $record) {
 
 // Runs any post-write batch hooks.
 if(isset($settings['WRITER']['postwritebatchhooks'])){
-  foreach ($settings['WRITER']['postwritebatchhooks'] as $cleanup) {
+  foreach ($settings['WRITER']['postwritebatchhooks'] as $hook) {
     $config_path = realpath($configPath);
-    $cmd = "$cleanup $config_path";
+    $cmd = "$hook $config_path";
     $process = new BackgroundProcess($cmd);
     $process->run();
   }
