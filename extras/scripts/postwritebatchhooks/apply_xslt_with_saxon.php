@@ -52,14 +52,9 @@ foreach ($transforms as $i => $transform) {
   $command = "java -jar saxon9he.jar -s:$xslt_input -xsl:$transform  -o:$xslt_output";
   $info_log->addInfo("Saxon command line: $command");
 
-  try {
-    exec($command, $ret);
+  exec($command, $ret);
+  if (!empty($ret)) {
+    $error_log->addError(sprintf("Output from saxon: %s", implode(",", $e)));
   }
-  catch(Exception $e) {
-    if (!empty($ret)) {
-      $error_log->addError(sprintf("Output from saxon: %s", implode("\n", $ret)));
-    }
-  }
-
   $xslt_input = $xslt_output;
 }
