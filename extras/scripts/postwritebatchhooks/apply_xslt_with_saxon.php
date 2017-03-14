@@ -11,14 +11,15 @@ require 'vendor/autoload.php';
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+$ds = DIRECTORY_SEPARATOR;
 $config_path = trim($argv[1]);
 $config = parse_ini_file($config_path, TRUE);
 $config_output_dir = $config['WRITER']['output_directory'];
 
 // Set up logging.
-$log_path = explode(DIRECTORY_SEPARATOR, $config['LOGGING']['path_to_log']);
+$log_path = explode($ds, $config['LOGGING']['path_to_log']);
 array_pop($log_path);
-$log_path = implode(DIRECTORY_SEPARATOR, $log_path) . DIRECTORY_SEPARATOR . 'saxon.log';
+$log_path = implode($ds, $log_path) . $ds . 'saxon.log';
 
 $info_log = new Logger('saxon_info');
 $info_log_handler = new StreamHandler($log_path, Logger::INFO);
@@ -37,13 +38,29 @@ if (!file_exists('saxon9he.jar')) {
   exit(1);
 }
 
+$xsl_working_dir = $config['XSLT']['working_dir'];
 $transforms = $config['XSLT']['stylesheets'];
-$xslt_input = $config_output_dir . DIRECTORY_SEPARATOR;
+file_exists($xsl_working_dir) ? NULL : mkdir($xsl_working_dir);
+
+function removeDirectory($path) {
+  $files = glob($path . '/*');
+  echo "removing file $path\n";
+  foreach ($files as $file) {
+    
+    is_dir($file) ? removeDirectory($file) : unlink($file);
+  }
+  rmdir($path);
+  return;
+}
+
+$xslt_start = $xsl_working_dir . $ds . 'xslt-0';
+rename($config_output_dir, $xslt_start);
+$xslt_input = $xslt_start;
 
 foreach ($transforms as $i => $transform) {
 
-  $transform_key = explode('.', array_pop(explode(DIRECTORY_SEPARATOR, $transform)))[0];
-  $xslt_output = sprintf('%s%sxslt-%d-%s%s', $config_output_dir, DIRECTORY_SEPARATOR, $i + 1, $transform_key, DIRECTORY_SEPARATOR);
+  $transform_key = explode('.', array_pop(explode($ds, $transform)))[0];
+  $xslt_output = sprintf('%s%sxslt-%d-%s%s', $xsl_working_dir, $ds, $i + 1, $transform_key, $ds);
   if (!is_dir($xslt_output)) {
     mkdir($xslt_output);
   }
@@ -58,3 +75,8 @@ foreach ($transforms as $i => $transform) {
   }
   $xslt_input = $xslt_output;
 }
+
+// Now move the results into the output dir.
+rename($xslt_input, $config_output_dir);
+$preserve_steps = isset($config['XSLT']['step_thru']) && $config['XSLT']['step_thru'];
+$preserve_steps ? NULL : removeDirectory($xsl_working_dir);
