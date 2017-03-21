@@ -38,27 +38,38 @@ if (!file_exists('saxon9he.jar')) {
   exit(1);
 }
 
+$copydir = function($src, $dest, $filter = NULL) {
+  if (!is_dir($dest)) {
+    mkdir($dest);
+  }
+  $files = scandir($src);
+  foreach ($files as $file) {
+    if($filter) {
+      if ($filter($file)) {
+        continue;
+      }
+    }
+    if (!is_dir($file)) {
+      copy($src . DIRECTORY_SEPARATOR . $file, $dest . DIRECTORY_SEPARATOR . $file);
+    }
+  }
+};
+
+
 $xsl_working_dir = $config['XSLT']['working_dir'];
 $transforms = $config['XSLT']['stylesheets'];
 file_exists($xsl_working_dir) ? NULL : mkdir($xsl_working_dir);
 
-function removeDirectory($path) {
-  $files = glob($path . '/*');
-  echo "removing file $path\n";
-  foreach ($files as $file) {
-    
-    is_dir($file) ? removeDirectory($file) : unlink($file);
-  }
-  rmdir($path);
-  return;
-}
-
 $xslt_start = $xsl_working_dir . $ds . 'xslt-0';
-rename($config_output_dir, $xslt_start);
+$copydir($config_output_dir, $xslt_start, function($file){
+  $ext = array_pop(explode('.', $file));
+  if ($ext !== 'xml') {
+    return TRUE;
+  }
+});
 $xslt_input = $xslt_start;
 
 foreach ($transforms as $i => $transform) {
-
   $transform_key = explode('.', array_pop(explode($ds, $transform)))[0];
   $xslt_output = sprintf('%s%sxslt-%d-%s%s', $xsl_working_dir, $ds, $i + 1, $transform_key, $ds);
   if (!is_dir($xslt_output)) {
@@ -77,6 +88,13 @@ foreach ($transforms as $i => $transform) {
 }
 
 // Now move the results into the output dir.
-rename($xslt_input, $config_output_dir);
-$preserve_steps = isset($config['XSLT']['step_thru']) && $config['XSLT']['step_thru'];
-$preserve_steps ? NULL : removeDirectory($xsl_working_dir);
+$copydir($xslt_output, $config_output_dir);
+
+if (isset($config['XSLT']['step_thru']) && !$config['XSLT']['step_thru']) {
+  $files = glob($xsl_working_dir . '/*');
+  echo "removing file $path\n";
+  foreach ($files as $file) {
+    is_dir($file) ? removeDirectory($file) : unlink($file);
+  }
+  rmdir($xsl_working_dir);
+}
