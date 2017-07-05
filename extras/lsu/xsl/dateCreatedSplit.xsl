@@ -308,7 +308,15 @@
                                 <xsl:when test="regex-group(3) = 'Dec'">12</xsl:when>
                             </xsl:choose>
                             <xsl:value-of select="replace(regex-group(2), '\s', ' ')"/>
-                            <xsl:value-of select="replace(regex-group(1), '\s', ' ')"/>
+                            <xsl:choose>
+                                <xsl:when test="regex-group(1) = '[1-9]'">
+                                    <xsl:text>0</xsl:text>
+                                    <xsl:value-of select="replace(regex-group(1), '\s', ' ')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="replace(regex-group(1), '\s', ' ')"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </dateCreated>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
