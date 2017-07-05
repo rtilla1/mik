@@ -42,7 +42,8 @@
     <xsl:variable name="priorRegEx" select="'[Pp]rior\sto\s([0-9]{4})|[Bb]efore\s([0-9]{4})'"/> <!-- prior to YYYY or before YYYY -->
     <xsl:variable name="questionableRegEx" select="'([0-9]{4})\(?\?\)?'"/> <!-- YYYY? or YYYY(?) -->
     <xsl:variable name="questionableRangeRegEx" select="'([0-9]{4})\(?\?\)?\s?-\s?([0-9]{4})\(?\?\)?'"/> <!-- YYYY?-YYYY? or YYYY? - YYYY? -->
-       
+    <xsl:variable name="serialnumber" select="'([0-9]{1,2})([-])([A-Z]{1}[a-z]{2})(-)([0-9]{1,2})'"/><!-- In the Excel spreadsheet, will display as 5 numbers, ie. the number of days since January 1, 1900, but will be written as 9-Oct-48 when exported-->
+      
     <xsl:template match="originInfo/dateCreated">
         <xsl:choose>
             <xsl:when test="matches(., $yearRangeRegEx) and not(matches(., 'Ca.'))">
@@ -281,6 +282,33 @@
                         <dateCreated keyDate="yes" point="end">
                             <xsl:value-of select="replace(regex-group(1), '\s+', ' ')"/>
                             <xsl:value-of select="replace(regex-group(2), '\s+', ' ')"/>
+                        </dateCreated>
+                    </xsl:matching-substring>
+                </xsl:analyze-string>
+            </xsl:when>
+            <xsl:when test="matches(., $serialnumber)">
+                <xsl:analyze-string select="." regex="{$serialnumber}">
+                    <xsl:matching-substring>
+                        <dateCreated keyDate="yes">
+                            <xsl:text>19</xsl:text>
+                            <xsl:value-of select="replace(regex-group(5), '\s', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(2), '\s', ' ')"/>
+                            <xsl:choose>
+                                <xsl:when test="regex-group(3) = 'Jan'">01</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Feb'">02</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Mar'">03</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Apr'">04</xsl:when>
+                                <xsl:when test="regex-group(3) = 'May'">05</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Jun'">06</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Jul'">07</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Aug'">08</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Sep'">09</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Oct'">10</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Nov'">11</xsl:when>
+                                <xsl:when test="regex-group(3) = 'Dec'">12</xsl:when>
+                            </xsl:choose>
+                            <xsl:value-of select="replace(regex-group(2), '\s', ' ')"/>
+                            <xsl:value-of select="replace(regex-group(1), '\s', ' ')"/>
                         </dateCreated>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
